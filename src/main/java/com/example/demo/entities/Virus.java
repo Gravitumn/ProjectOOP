@@ -1,5 +1,10 @@
 package com.example.demo.entities;
 
-public interface Virus extends Entity{
+public class Virus implements Entity {
+    private String geneticCode;
 
+    @Override
+    public String getCode() {
+        return this.geneticCode;
+    }
 }
