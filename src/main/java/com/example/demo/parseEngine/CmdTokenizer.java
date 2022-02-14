@@ -31,23 +31,30 @@ public class CmdTokenizer implements Tokenizer{
     public boolean peek(String target){ return next.equals(target); }
 
     public void getNext() throws SyntaxErrorException {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder s = new StringBuilder();
+        while (pos < cmd.length() && Character.isWhitespace(cmd.charAt(pos)))
+            pos++;  // ignore whitespace
         char c = cmd.charAt(pos);
-        while(pos<cmd.length()){
-            if(isBlock(c)){
-                pos++;
-                break;
-            }else if(isWhiteSpace(c)){
-                pos++;
-            }else{
-                throw new SyntaxErrorException("Unknown Character: ");
-            }
-
+        if (Character.isDigit(c)) {  // start of number
+            s.append(c);
+            for (pos++; pos < cmd.length() &&
+                    Character.isDigit(cmd.charAt(pos)); pos++)
+                s.append(cmd.charAt(pos));
         }
-        next = sb.toString();
+        else if (Character.isLetter(c)) {  // start of string
+            s.append(c);
+            for (pos++; pos < cmd.length() &&
+                    Character.isLetter(cmd.charAt(pos)); pos++)
+                s.append(cmd.charAt(pos));
+        }
+        else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == '(' || c == ')') {
+            s.append(c);
+            pos++;
+        }
+        else {
+            throw new SyntaxErrorException("unknown character: " + c);
+        }
+        next = s.toString();
     }
 
-    private boolean isBlock(char c) { return c == '{' || c == '}'; }
-
-    private boolean isWhiteSpace(char c) { return c == 32; }
 }
