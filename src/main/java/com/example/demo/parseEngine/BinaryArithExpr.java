@@ -21,6 +21,7 @@ public class BinaryArithExpr implements Expr{
         if (op.equals("*")) return lv * rv;
         if (op.equals("/")) return lv / rv;
         if (op.equals("%")) return lv % rv;
+        if (op.equals("^")) return (int) Math.pow(lv,rv);
         throw new EvalError("unknown op: " + op);
     }
     public void prettyPrint(StringBuilder s) {

@@ -57,4 +57,8 @@ public class CmdTokenizer implements Tokenizer{
         next = s.toString();
     }
 
+    //verifies if it reaches the end
+    public boolean atEndOfSauce(){
+        return pos >= cmd.length();
+    }
 }
