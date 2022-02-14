@@ -47,7 +47,7 @@ public class CmdTokenizer implements Tokenizer{
                     Character.isLetter(cmd.charAt(pos)); pos++)
                 s.append(cmd.charAt(pos));
         }
-        else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == '(' || c == ')') {
+        else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == '(' || c == ')' || c == '^') {
             s.append(c);
             pos++;
         }

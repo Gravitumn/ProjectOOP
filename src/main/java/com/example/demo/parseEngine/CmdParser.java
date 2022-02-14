@@ -5,10 +5,12 @@ import java.util.Map;
 public class CmdParser{
     private CmdTokenizer tkz;
     private Map<String, Integer> vars;
+    Factory factory;
 
     public CmdParser(CmdTokenizer tkz, Map<String, Integer> vars) {
         this.tkz = tkz;
         this.vars = vars;
+        factory = Factory.instance();
     }
 
     public void parseStatement() throws SyntaxErrorException {
@@ -105,8 +107,8 @@ public class CmdParser{
         }
         while (plus || minus) {
             tkz.consume();
-            if (plus) ex = new BinaryArithExpr(ex,"+",parseTerm());
-            if (minus) ex = new BinaryArithExpr(ex,"-",parseTerm());
+            if (plus) ex = factory.newExpr1(ex,"+",parseTerm());
+            if (minus) ex = factory.newExpr1(ex,"-",parseTerm());
             if(!tkz.atEndOfSauce()){
                 plus = tkz.peek("+");
                 minus = tkz.peek("-");
@@ -128,9 +130,9 @@ public class CmdParser{
         }
         while (mul || div || mod) {
             tkz.consume();
-            if (mul) ex = new BinaryArithExpr(ex, "*", parseFactor());
-            if (div) ex = new BinaryArithExpr(ex, "/", parseFactor());
-            if (mod) ex = new BinaryArithExpr(ex, "%", parseFactor());
+            if (mul) ex = factory.newExpr1(ex, "*", parseFactor());
+            if (div) ex = factory.newExpr1(ex, "/", parseFactor());
+            if (mod) ex = factory.newExpr1(ex, "%", parseFactor());
             if (!tkz.atEndOfSauce()) {
                 mul = tkz.peek("*");
                 div = tkz.peek("/");
@@ -141,25 +143,63 @@ public class CmdParser{
         return ex;
     }
 
-    public Expr parseFactor() {
-        String next = tkz.peek();
-        Expr ex = parsePower();
-        //emty because I run of ideas
-
-
-        return ex;
+    public Expr parseFactor() throws SyntaxErrorException{
+        Expr v = parsePower();
+        while (tkz.peek("^")){
+            tkz.consume();
+            v = factory.newExpr1(v,"^",parsePower());
+        }
+        return v;
     }
 
-    public Expr parsePower() {
-        String next = tkz.peek();
-        Expr ex = parsePower();
-        //emty because I run of ideas
 
-        return null;
+    public Expr parsePower() throws SyntaxErrorException{
+        if (isNumber(tkz.peek())) {
+            return factory.newExpr2(Integer.parseInt(tkz.consume()));
+        }
+        if (isLetter(tkz.peek())) {
+            if(tkz.peek("virus") || tkz.peek("antibody") || tkz.peek("nearby"))
+                return parseSensor();
+            else
+                return factory.newExpr3(tkz.consume());
+        }
+        else if(tkz.peek("(")) {
+            tkz.consume();
+            Expr v = parseExpr();
+            if (tkz.peek(")"))
+                tkz.consume();
+            else
+                throw new SyntaxErrorException("SyntaxError");
+            return v;
+        }
+        else{
+            throw new SyntaxErrorException("SyntaxError");
+        }
     }
 
-    public void parseSensor() {
+    public Expr parseSensor() {
 
+    }
+
+    private boolean isLetter(String str) {
+        char[] ac=str.toCharArray();
+        for(char i : ac){
+            if(!Character.isLetter(i)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    private boolean isNumber(String str) {
+        char[] ac=str.toCharArray();
+        for(char i : ac){
+            if(!Character.isDigit(i)){
+                return false;
+            }
+        }
+        return true;
     }
 
     //throw exceptions here and it's a lot shorter
