@@ -22,11 +22,14 @@ public class CmdParser{
     public void parseStatement() throws SyntaxErrorException, EvalError {
         String next = tkz.peek();
         switch (next){
-            case "{" -> parseBlock();
-            case "if" -> parseIf();
-            case "while" -> parseWhile();
-            case "shoot", "move", "kek" -> parseCommand();
-            default -> blame("Unknown characters/word: " + next);
+            case "{" :
+                parseBlock();
+            case "if" :
+                parseIf();
+            case "while" :
+                parseWhile();
+            default :
+                parseCommand();
         }
     }
 
@@ -34,8 +37,12 @@ public class CmdParser{
     public void parseCommand() throws SyntaxErrorException, EvalError {
         String next = tkz.peek();
         switch (next){
-            case "shoot","move" -> parseActionCmd();
-            default -> parseStatement();
+            case "shoot":
+                parseActionCmd();
+            case "move" :
+                parseActionCmd();
+            default :
+                parseAssignmentStatement();
         }
 
     }
@@ -54,8 +61,10 @@ public class CmdParser{
     public void parseActionCmd() throws SyntaxErrorException {
         String next = tkz.peek();
         switch (next){
-            case "shoot" -> parseATK();
-            case "move" -> parseMove();
+            case "shoot" :
+                parseATK();
+            case "move" :
+                parseMove();
         }
     }
 
@@ -114,7 +123,7 @@ public class CmdParser{
         tkz.consume("(");
         Expr ex = parseExpr();
         tkz.consume(")");
-        for(int i=0;i<1000 || ex.eval(vars)>=0;i++){
+        for(int i=0;i<1000 && ex.eval(vars)>0;i++){
             parseStatement();
         }
 
