@@ -1,11 +1,17 @@
 package com.example.demo.parseEngine;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 public class CmdParser{
     private CmdTokenizer tkz;
     private Map<String, Integer> vars;
     Factory factory;
+    private final ArrayList<String> reservedWord = new ArrayList<>(
+            Arrays.asList("antibody","down","downleft","downright","else","if","left","move","nearby","right","shoot",
+                    "then","up","upleft","upright","virus","while")
+    );
 
     public CmdParser(CmdTokenizer tkz, Map<String, Integer> vars) {
         this.tkz = tkz;
@@ -19,7 +25,7 @@ public class CmdParser{
             case "{" -> parseBlock();
             case "if" -> parseIf();
             case "while" -> parseWhile();
-            case "attack", "move", "kek" -> parseCommand();
+            case "shoot", "move", "kek" -> parseCommand();
             default -> blame("Unknown characters/word: " + next);
         }
     }
@@ -28,20 +34,20 @@ public class CmdParser{
     public void parseCommand() throws SyntaxErrorException {
         String next = tkz.peek();
         switch (next){
-            case "attack","move" -> parseActionCmd();
+            case "shoot","move" -> parseActionCmd();
             default -> blame();
         }
 
     }
 
-    public void parseAssignmentStatement() {
+    public void parseAssignmentStatement(){
         String next = tkz.peek();
     }
 
     public void parseActionCmd() throws SyntaxErrorException {
         String next = tkz.peek();
         switch (next){
-            case "attack" -> parseATK();
+            case "shoot" -> parseATK();
             case "move" -> parseMove();
         }
     }
@@ -53,7 +59,7 @@ public class CmdParser{
     }
 
     public void parseATK() throws SyntaxErrorException {
-        tkz.consume("attack");
+        tkz.consume("shoot");
         parseDirection();
     }
 
