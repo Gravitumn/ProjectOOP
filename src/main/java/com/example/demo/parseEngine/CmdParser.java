@@ -169,7 +169,7 @@ public class CmdParser{
             if (tkz.peek(")"))
                 tkz.consume();
             else
-                throw new SyntaxErrorException("SyntaxError");
+                blame("SyntaxError");
             return v;
         }
         else{
