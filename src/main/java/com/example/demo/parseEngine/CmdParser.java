@@ -31,19 +31,25 @@ public class CmdParser{
     }
 
 
-    public void parseCommand() throws SyntaxErrorException {
+    public void parseCommand() throws SyntaxErrorException, EvalError {
         String next = tkz.peek();
         switch (next){
             case "shoot","move" -> parseActionCmd();
-            default -> blame();
+            default -> parseStatement();
         }
 
     }
 
     public void parseAssignmentStatement() throws SyntaxErrorException, EvalError {
-        String next = tkz.consume();
+        String next = tkz.consume();                                //var's name
+        //checks for reserved words and character outside of letters
+        if (!isVariable(next)) throw new SyntaxErrorException("Variable must contain letters only.");
+        for(String s:reservedWord){
+            if(s.equals(next)) throw new SyntaxErrorException("Variable must not be named after reserved words.");
+        }
+
         tkz.consume("=");
-        Expr value = parseExpr();
+        Expr value = parseExpr();                                   //value
         vars.put(next,value.eval(vars));
     }
 
@@ -76,6 +82,7 @@ public class CmdParser{
             default -> blame("Incorrect direction: " + next);
         }
         blame("Unknown Error.");
+        return null;
     }
 
     public void parseIf() throws SyntaxErrorException, EvalError {
@@ -181,7 +188,7 @@ public class CmdParser{
         if (isNumber(tkz.peek())) {
             return factory.newIntlit(Integer.parseInt(tkz.consume()));
         }
-        if (isLetter(tkz.peek())) {
+        if (isVariable(tkz.peek())) {
             if(tkz.peek("virus") || tkz.peek("antibody") || tkz.peek("nearby"))
                 return parseSensor();
             else
@@ -207,6 +214,7 @@ public class CmdParser{
         return null;
     }
 
+    //String restriction checkers
     private boolean isLetter(String str) {
         char[] ac=str.toCharArray();
         for(char i : ac){
@@ -217,6 +225,17 @@ public class CmdParser{
         return true;
     }
 
+    private boolean isVariable(String str) {
+        char[] ac=str.toCharArray();
+        if (!Character.isLetter(ac[0]))
+            return false;
+        for(char i : ac){
+            if(!Character.isLetter(i) || !Character.isDigit(i)){
+                return false;
+            }
+        }
+        return true;
+    }
 
     private boolean isNumber(String str) {
         char[] ac=str.toCharArray();
