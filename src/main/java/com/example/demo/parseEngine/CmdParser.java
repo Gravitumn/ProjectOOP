@@ -19,7 +19,7 @@ public class CmdParser{
         factory = Factory.instance();
     }
 
-    public void parseStatement() throws SyntaxErrorException {
+    public void parseStatement() throws SyntaxErrorException, EvalError {
         String next = tkz.peek();
         switch (next){
             case "{" -> parseBlock();
@@ -40,8 +40,11 @@ public class CmdParser{
 
     }
 
-    public void parseAssignmentStatement(){
-        String next = tkz.peek();
+    public void parseAssignmentStatement() throws SyntaxErrorException, EvalError {
+        String next = tkz.consume();
+        tkz.consume("=");
+        Expr value = parseExpr();
+        vars.put(next,value.eval(vars));
     }
 
     public void parseActionCmd() throws SyntaxErrorException {
@@ -63,41 +66,56 @@ public class CmdParser{
         parseDirection();
     }
 
-    public void parseDirection() throws SyntaxErrorException {
+    public String parseDirection() throws SyntaxErrorException {
         String next = tkz.peek();
         //left blank for now - out of ideas
         switch(next){
-            case "left" -> {}
-            case "right" -> {}
-            case "up" -> {}
-            case "down" -> {}
-            case "upleft" -> {}
-            case "upright" -> {}
-            case "downleft" -> {}
-            case "downright" -> {}
+            case "left", "right", "up", "down",
+                    "upleft", "upright", "downleft",
+                    "downright" -> {return next;}
             default -> blame("Incorrect direction: " + next);
         }
+        blame("Unknown Error.");
     }
 
-    public void parseIf() throws SyntaxErrorException {
+    public void parseIf() throws SyntaxErrorException, EvalError {
         tkz.consume("if");
         tkz.consume("(");
-        parseExpr();
+        Expr ex = parseExpr();
         tkz.consume(")");
+        if(ex.eval(vars) >= 0){
+            tkz.consume("then");
+            parseStatement();
+        }
+        //now how can we parse else?
+        else{
+            if(tkz.peek("shoot") || tkz.peek("move")) {
+                tkz.consume();
+                tkz.consume();
+            }else if(tkz.peek("")){
+
+            }else blame("Unknown error");
+
+            tkz.consume("else");
+            parseStatement();
+        }
 //        parseStatement();
 //        if(tkz.peek("else")) tkz.consume();
 //        parseStatement();
     }
 
-    public void parseWhile() throws SyntaxErrorException {
+    public void parseWhile() throws SyntaxErrorException, EvalError {
         tkz.consume("while");
         tkz.consume("(");
-        parseExpr();
+        Expr ex = parseExpr();
         tkz.consume(")");
-        parseStatement();
+        for(int i=0;i<1000 || ex.eval(vars)>=0;i++){
+            parseStatement();
+        }
+
     }
 
-    public void parseBlock() throws SyntaxErrorException {
+    public void parseBlock() throws SyntaxErrorException, EvalError {
         tkz.consume("{");
         parseStatement();
         tkz.consume("}");
@@ -183,7 +201,9 @@ public class CmdParser{
         }
     }
 
-    public Expr parseSensor() {
+    public Expr parseSensor() throws SyntaxErrorException {
+        String next = tkz.consume();
+        String direction = parseDirection();
         return null;
     }
 
