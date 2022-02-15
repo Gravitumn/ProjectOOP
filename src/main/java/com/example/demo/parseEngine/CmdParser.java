@@ -79,14 +79,28 @@ public class CmdParser{
         parseDirection();
     }
 
-    public String parseDirection() throws SyntaxErrorException {
+    public Integer parseDirection() throws SyntaxErrorException {
         String next = tkz.peek();
         //left blank for now - out of ideas
         switch(next){
-            case "left", "right", "up", "down",
-                    "upleft", "upright", "downleft",
-                    "downright" -> {return next;}
-            default -> blame("Incorrect direction: " + next);
+            case "up":
+                return 1;
+            case "upright":
+                return 2;
+            case "right":
+                return 3;
+            case "downright":
+                return 4;
+            case "down":
+                return 5;
+            case "downleft":
+                return 6;
+            case "left":
+                return 7;
+            case "upleft":
+                return 8;
+            default :
+                blame("Incorrect direction: " + next);
         }
         blame("Unknown Error.");
         return null;
