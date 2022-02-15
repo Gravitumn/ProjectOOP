@@ -4,6 +4,8 @@ public class Factory {
 
     private static Factory instance;
 
+    private Factory(){}                 //locked for this class only
+
     public BinaryArithExpr newArithExpr(Expr left, String op, Expr right){
         return new BinaryArithExpr(left,op,right);
     }
@@ -16,13 +18,10 @@ public class Factory {
         return new Variable(name);
     }
 
-
     public static Factory instance() {
         if (instance == null) {
             instance = new Factory();
         }
         return instance;
     }
-
-
 }
