@@ -1,14 +1,16 @@
 package com.example.demo.gameState;
 
+import com.example.demo.entities.*;
+
 public class Board{
     //for now, assume that the grid contains int.
     //which 0 = empty column.
     //1 = has virus.
     //2 = has antibody.
-    private static int[][] grid;
+    private static Entity[][] grid;
 
     public Board(int m,int n){
-        grid = new int[m][n];
+        grid = new Entity[m][n];
     }
 
     /**
@@ -30,7 +32,7 @@ public class Board{
      * @return true if grid[x][y] is actually virus, otherwise, false.
      */
     public static boolean IsVirus(int x,int y){
-        return grid[x][y] == 1;
+        return grid[x][y].getClass().toString().equals("class com.example.demo.entities.Antibody");
     }
 
     /**
@@ -40,6 +42,6 @@ public class Board{
      * @return true if grid[x][y] is actually antibody, otherwise, false.
      */
     public static boolean IsAntibody(int x,int y){
-        return grid[x][y] == 2;
+        return grid[x][y].getClass().toString().equals("class com.example.demo.entities.Virus");
     }
 }

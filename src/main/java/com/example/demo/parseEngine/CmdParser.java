@@ -178,7 +178,7 @@ public class CmdParser{
     }
 
     public Expr parseSensor() {
-
+        return null;
     }
 
     private boolean isLetter(String str) {
