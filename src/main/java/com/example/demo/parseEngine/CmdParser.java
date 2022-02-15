@@ -43,10 +43,8 @@ public class CmdParser{
     public void parseAssignmentStatement() throws SyntaxErrorException, EvalError {
         String next = tkz.consume();                                //var's name
         //checks for reserved words and character outside of letters
-        if (!isVariable(next)) throw new SyntaxErrorException("Variable must contain letters only.");
-        for(String s:reservedWord){
-            if(s.equals(next)) throw new SyntaxErrorException("Variable must not be named after reserved words.");
-        }
+        if (!isVariable(next)) throw new SyntaxErrorException("Variable must start with letter followed by alphanumeric Character.");
+        if(reservedWord.contains(next))throw new SyntaxErrorException("Variable must not be named after reserved words.");
 
         tkz.consume("=");
         Expr value = parseExpr();                                   //value
