@@ -1,5 +1,8 @@
 package com.example.demo.parseEngine;
 
+import com.example.demo.entities.Entity;
+import com.example.demo.gameState.Board;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -8,13 +11,16 @@ public class CmdParser{
     private CmdTokenizer tkz;
     private Map<String, Integer> vars;
     Factory factory;
+    private final Entity current_unit;
+
     private final ArrayList<String> reservedWord = new ArrayList<>(
             Arrays.asList("antibody","down","downleft","downright","else","if","left","move","nearby","right","shoot",
                     "then","up","upleft","upright","virus","while")
     );
 
-    public CmdParser(CmdTokenizer tkz, Map<String, Integer> vars) {
-        this.tkz = tkz;
+    public CmdParser(Map<String, Integer> vars, Entity e) throws SyntaxErrorException {
+        this.tkz = new CmdTokenizer(e.getCode());
+        this.current_unit = e;
         this.vars = vars;
         factory = Factory.instance();
     }
@@ -54,7 +60,7 @@ public class CmdParser{
         if(reservedWord.contains(next))throw new SyntaxErrorException("Variable must not be named after reserved words.");
 
         tkz.consume("=");
-        Expr value = parseExpr();                                   //value
+        Expr value = parseExpr();//value
         vars.put(next,value.eval(vars));
     }
 
@@ -231,7 +237,16 @@ public class CmdParser{
 
     public Expr parseSensor() throws SyntaxErrorException {
         String next = tkz.consume();
-        String direction = parseDirection();
+        if(next.equals("virus")){
+
+        }else if(next.equals("antibody")){
+
+        }else if(next.equals("nearby")){
+
+        }else{
+
+        }
+        int direction = parseDirection();
         return null;
     }
 
