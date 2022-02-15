@@ -107,8 +107,8 @@ public class CmdParser{
         }
         while (plus || minus) {
             tkz.consume();
-            if (plus) ex = factory.newExpr1(ex,"+",parseTerm());
-            if (minus) ex = factory.newExpr1(ex,"-",parseTerm());
+            if (plus) ex = factory.newArithExpr(ex,"+",parseTerm());
+            if (minus) ex = factory.newArithExpr(ex,"-",parseTerm());
             if(!tkz.atEndOfSauce()){
                 plus = tkz.peek("+");
                 minus = tkz.peek("-");
@@ -130,9 +130,9 @@ public class CmdParser{
         }
         while (mul || div || mod) {
             tkz.consume();
-            if (mul) ex = factory.newExpr1(ex, "*", parseFactor());
-            if (div) ex = factory.newExpr1(ex, "/", parseFactor());
-            if (mod) ex = factory.newExpr1(ex, "%", parseFactor());
+            if (mul) ex = factory.newArithExpr(ex, "*", parseFactor());
+            if (div) ex = factory.newArithExpr(ex, "/", parseFactor());
+            if (mod) ex = factory.newArithExpr(ex, "%", parseFactor());
             if (!tkz.atEndOfSauce()) {
                 mul = tkz.peek("*");
                 div = tkz.peek("/");
@@ -147,7 +147,7 @@ public class CmdParser{
         Expr v = parsePower();
         while (tkz.peek("^")){
             tkz.consume();
-            v = factory.newExpr1(v,"^",parsePower());
+            v = factory.newArithExpr(v,"^",parsePower());
         }
         return v;
     }
@@ -155,13 +155,13 @@ public class CmdParser{
 
     public Expr parsePower() throws SyntaxErrorException{
         if (isNumber(tkz.peek())) {
-            return factory.newExpr2(Integer.parseInt(tkz.consume()));
+            return factory.newIntlit(Integer.parseInt(tkz.consume()));
         }
         if (isLetter(tkz.peek())) {
             if(tkz.peek("virus") || tkz.peek("antibody") || tkz.peek("nearby"))
                 return parseSensor();
             else
-                return factory.newExpr3(tkz.consume());
+                return factory.newVar(tkz.consume());
         }
         else if(tkz.peek("(")) {
             tkz.consume();
