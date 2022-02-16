@@ -6,10 +6,14 @@ import com.example.demo.utility.Pair;
 import java.util.LinkedList;
 
 public class Board{
+    static int m;
+    static int n;
     private static Entity[][] grid;
     private static LinkedList<Entity> queue = new LinkedList<>();
 
     public Board(int m,int n){
+        Board.m = m;
+        Board.n = n;
         grid = new Entity[m][n];
     }
 
@@ -68,7 +72,10 @@ public class Board{
      * Side-effect : upon returning true, change location of this entity.
      */
     public static boolean move(Entity e,Pair<Integer,Integer> newLocation){
-        if(!IsVirus(newLocation.fst(), newLocation.snd()) && !IsAntibody(newLocation.fst(), newLocation.snd())) {
+        if(!IsVirus(newLocation.fst(), newLocation.snd()) && !IsAntibody(newLocation.fst(), newLocation.snd()) &&
+                newLocation.fst() >= 0 && newLocation.fst() <= n &&
+                newLocation.snd() >= 0 && newLocation.snd() <= m)
+        {
             grid[newLocation.fst()][newLocation.snd()] = e;
             return true;
         }
