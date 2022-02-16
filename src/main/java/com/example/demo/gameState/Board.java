@@ -1,13 +1,13 @@
 package com.example.demo.gameState;
 
 import com.example.demo.entities.*;
+import com.example.demo.utility.Pair;
+
+import java.util.LinkedList;
 
 public class Board{
-    //for now, assume that the grid contains int.
-    //which 0 = empty column.
-    //1 = has virus.
-    //2 = has antibody.
     private static Entity[][] grid;
+    private static LinkedList<Entity> queue = new LinkedList<>();
 
     public Board(int m,int n){
         grid = new Entity[m][n];
@@ -43,5 +43,35 @@ public class Board{
      */
     public static boolean IsAntibody(int x,int y){
         return grid[x][y].getClass().toString().equals("class com.example.demo.entities.Virus");
+    }
+
+    /**
+     * add new Entity to the board.
+     * @param e Specific entity
+     * @param location pair of x coordinate and y coordinate.
+     */
+    public static void addEntity(Entity e, Pair<Integer,Integer> location){
+        addUnit(e);
+        grid[location.fst()][location.snd()] = e;
+    }
+
+    private static void addUnit(Entity e){
+        queue.add(e);
+    }
+
+    /**
+     * make the entity passed as parameter move.
+     * @param e entity which need to move
+     * @param newLocation the new location for this entity
+     * @return true if the new location is available for new entity(no entity in that location).
+     *          otherwise, return false.
+     * Side-effect : upon returning true, change location of this entity.
+     */
+    public static boolean move(Entity e,Pair<Integer,Integer> newLocation){
+        if(!IsVirus(newLocation.fst(), newLocation.snd()) && !IsAntibody(newLocation.fst(), newLocation.snd())) {
+            grid[newLocation.fst()][newLocation.snd()] = e;
+            return true;
+        }
+        else return false;
     }
 }
