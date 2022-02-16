@@ -95,7 +95,7 @@ public class CmdParser{
 
     public void parseATK() throws SyntaxErrorException {
         tkz.consume("shoot");
-        parseDirection();
+        int direction = parseDirection();
     }
 
     public Integer parseDirection() throws SyntaxErrorException {
@@ -254,12 +254,12 @@ public class CmdParser{
         String next = tkz.consume();
         switch (next) {
             case "virus":
-                return factory.newIntlit(Board.nearbyVirus(current_unit));
+                return factory.newIntlit(current_unit.nearbyVirus());
             case "antibody":
-                return factory.newIntlit(Board.nearbyAntibody(current_unit));
+                return factory.newIntlit(current_unit.nearbyAntibody());
             case "nearby":
                 int direction = parseDirection();
-                return factory.newIntlit(Board.nearbyEntity(current_unit, direction));
+                return factory.newIntlit(current_unit.nearbyEntity(direction));
             default:
                 throw new SyntaxErrorException("SensorCommand Grammar : virus | antibody | nearby+direction ");
         }
