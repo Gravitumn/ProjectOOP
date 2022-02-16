@@ -226,6 +226,7 @@ public class CmdParser{
 
 
     public Expr parsePower() throws SyntaxErrorException{
+
         if (isNumber(tkz.peek())) {
             return factory.newIntlit(Integer.parseInt(tkz.consume()));
         }
