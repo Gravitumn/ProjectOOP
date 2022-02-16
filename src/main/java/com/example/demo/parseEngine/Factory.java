@@ -1,5 +1,6 @@
 package com.example.demo.parseEngine;
 
+import com.example.demo.utility.Increment;
 import com.example.demo.utility.Pair;
 
 public class Factory {
@@ -21,6 +22,8 @@ public class Factory {
     }
 
     public Pair<Integer,Integer> newPair(int fst,int snd) {return new Pair<>(fst,snd);}
+
+    public Increment newIncrement(int direction){return new Increment(direction);}
 
     public static Factory instance() {
         if (instance == null) {
