@@ -1,11 +1,15 @@
 package com.example.demo.gameState;
 
 import com.example.demo.entities.*;
+import com.example.demo.parseEngine.Factory;
 import com.example.demo.utility.Pair;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 
 public class Board{
+    private static Factory factory = Factory.instance();
     static int m;
     static int n;
     private static Entity[][] grid;
@@ -19,14 +23,12 @@ public class Board{
 
     /**
      *
-     * @param x1 x coordinate of the first point.
-     * @param y1 y coordinate of the first point.
-     * @param x2 x coordinate of the second point.
-     * @param y2 y coordinate of the second point.
-     * @return distance between two point on this grid.
+     * @param firstloc a pair of x and y coordinate for first location on grid.
+     * @param secondloc a pair of x and y coordinate for second location on grid.
+     * @return distance between these locations.
      */
-    public static int findDistance(int x1, int y1, int x2, int y2){
-        return Math.max(Math.abs(x1-x2),Math.abs(y1-y2));
+    public static int findDistance(Pair<Integer,Integer> firstloc,Pair<Integer,Integer> secondloc){
+        return Math.max(Math.abs(firstloc.fst()-secondloc.fst()),Math.abs(firstloc.snd()-secondloc.snd()));
     }
 
     /**
@@ -55,12 +57,8 @@ public class Board{
      * @param location pair of x coordinate and y coordinate.
      */
     public static void addEntity(Entity e, Pair<Integer,Integer> location){
-        addUnit(e);
-        grid[location.fst()][location.snd()] = e;
-    }
-
-    private static void addUnit(Entity e){
         queue.add(e);
+        grid[location.fst()][location.snd()] = e;
     }
 
     /**
@@ -80,5 +78,78 @@ public class Board{
             return true;
         }
         else return false;
+    }
+
+    public static int nearbyEntity(Entity e,int direction){
+        int startX = e.getLocation().snd();
+        int startY = e.getLocation().fst();
+
+        int xIncrement = direction == 2||direction == 3||direction ==4? 1:direction == 6||direction==7||direction == 8? -1:0;
+        int yIncrement = direction == 1||direction == 2||direction ==8? 1:direction == 4||direction==5||direction == 6? -1:0;
+
+        startX += xIncrement;
+        startY += yIncrement;
+        while(!IsVirus(startX,startY) && !IsAntibody(startX,startY)){
+            startX+=xIncrement;
+            startY+=yIncrement;
+            if(startX > n || startY > m || startX < 0 || startY < 0){
+                return 0;
+            }
+        }
+        int distance = findDistance(e.getLocation(), factory.newPair(startX,startY));
+        if(IsVirus(startX,startY))
+            return 10*distance +1;
+        else
+            return 10*distance+2;
+    }
+
+    public static int nearbyVirus(Entity e){
+        ArrayList<Integer> distance = new ArrayList<>();
+        int startX = e.getLocation().snd();
+        int startY = e.getLocation().fst();
+
+        for(int i=1;i<=8;i++){
+            int xIncrement = i == 2||i == 3||i ==4? 1:i == 6||i==7||i == 8? -1:0;
+            int yIncrement = i == 1||i == 2||i ==8? 1:i == 4||i==5||i == 6? -1:0;
+            while(!IsVirus(startX,startY)){
+                startX += xIncrement;
+                startY += yIncrement;
+                startX+=xIncrement;
+                startY+=yIncrement;
+                if(startX > n || startY > m || startX < 0 || startY < 0){
+                    break;
+                }
+            }
+            distance.add(10*findDistance(e.getLocation(), factory.newPair(startX,startY))+1);
+        }
+        if(distance.isEmpty())
+            return 0;
+        else
+            return Collections.min(distance);
+    }
+
+    public static int nearbyAntibody(Entity e){
+        ArrayList<Integer> distance = new ArrayList<>();
+        int startX = e.getLocation().snd();
+        int startY = e.getLocation().fst();
+
+        for(int i=1;i<=8;i++){
+            int xIncrement = i == 2||i == 3||i ==4? 1:i == 6||i==7||i == 8? -1:0;
+            int yIncrement = i == 1||i == 2||i ==8? 1:i == 4||i==5||i == 6? -1:0;
+            while(!IsAntibody(startX,startY)){
+                startX += xIncrement;
+                startY += yIncrement;
+                startX+=xIncrement;
+                startY+=yIncrement;
+                if(startX > n || startY > m || startX < 0 || startY < 0){
+                    break;
+                }
+            }
+            distance.add(10*findDistance(e.getLocation(), factory.newPair(startX,startY))+2);
+        }
+        if(distance.isEmpty())
+            return 0;
+        else
+            return Collections.min(distance);
     }
 }

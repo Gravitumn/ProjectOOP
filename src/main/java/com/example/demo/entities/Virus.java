@@ -20,8 +20,8 @@ public class Virus implements Entity {
     }
 
     public void changeLocation(int direction){
-        int xCoordinate = this.location.fst();
-        int yCoordinate = this.location.snd();
+        int xCoordinate = this.location.snd();
+        int yCoordinate = this.location.fst();
         switch (direction){
             case 1 : yCoordinate++;
             case 2 : xCoordinate++;yCoordinate++;

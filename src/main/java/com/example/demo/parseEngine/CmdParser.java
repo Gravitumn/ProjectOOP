@@ -77,7 +77,8 @@ public class CmdParser{
 
     public void parseMove() throws SyntaxErrorException {
         tkz.consume("move");
-        parseDirection();
+        int direction = parseDirection();
+        current_unit.changeLocation(direction);
     }
 
     public void parseATK() throws SyntaxErrorException {
@@ -239,17 +240,17 @@ public class CmdParser{
 
     public Expr parseSensor() throws SyntaxErrorException {
         String next = tkz.consume();
-        if(next.equals("virus")){
-
-        }else if(next.equals("antibody")){
-
-        }else if(next.equals("nearby")){
-
-        }else{
-
+        switch (next) {
+            case "virus":
+                return factory.newIntlit(Board.nearbyVirus(current_unit));
+            case "antibody":
+                return factory.newIntlit(Board.nearbyAntibody(current_unit));
+            case "nearby":
+                int direction = parseDirection();
+                return factory.newIntlit(Board.nearbyEntity(current_unit, direction));
+            default:
+                throw new SyntaxErrorException("SensorCommand Grammar : virus | antibody | nearby+direction ");
         }
-        int direction = parseDirection();
-        return null;
     }
 
     //String restriction checkers
