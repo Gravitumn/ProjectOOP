@@ -80,6 +80,13 @@ public class Board{
         else return false;
     }
 
+    /**
+     * looking for an entity that is closest to this entity in the given direction.
+     * @param e the entity that will be center of radius.
+     * @param direction integer 1-8
+     *                  which 1 = up,2 = upright,..., 8 = upleft.
+     * @return  distance between entity e and the founded entity, return 0 if not found.
+     */
     public static int nearbyEntity(Entity e,int direction){
         int startX = e.getLocation().snd();
         int startY = e.getLocation().fst();
@@ -103,6 +110,11 @@ public class Board{
             return 10*distance+2;
     }
 
+    /**
+     * looking for a virus that is closest to this entity.
+     * @param e the entity that will be center of radius.
+     * @return  distance between entity e and the founded virus, return 0 if not found.
+     */
     public static int nearbyVirus(Entity e){
         ArrayList<Integer> distance = new ArrayList<>();
         int startX = e.getLocation().snd();
@@ -128,6 +140,11 @@ public class Board{
             return Collections.min(distance);
     }
 
+    /**
+     * looking for an antibody that is closest to this entity.
+     * @param e the entity that will be center of radius.
+     * @return  distance between entity e and the founded antibody, return 0 if not found.
+     */
     public static int nearbyAntibody(Entity e){
         ArrayList<Integer> distance = new ArrayList<>();
         int startX = e.getLocation().snd();
