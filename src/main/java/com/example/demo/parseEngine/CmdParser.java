@@ -109,7 +109,6 @@ public class CmdParser{
             default :
                 blame("Incorrect direction: " + next);
         }
-        blame("Unknown Error.");
         return null;
     }
 
