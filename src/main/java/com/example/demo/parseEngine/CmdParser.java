@@ -151,7 +151,9 @@ public class CmdParser{
 
     public void parseBlock() throws SyntaxErrorException, EvalError {
         tkz.consume("{");
-        parseStatement();
+        while(!tkz.peek("}")){                  //this runs until it reaches }
+            parseStatement();
+        }
         tkz.consume("}");
     }
 
