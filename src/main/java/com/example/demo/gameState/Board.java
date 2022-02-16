@@ -38,6 +38,7 @@ public class Board{
      * @return true if grid[x][y] is actually virus, otherwise, false.
      */
     public static boolean IsVirus(int x,int y){
+        if(grid[x][y]==null) return false;
         return grid[x][y].getClass().toString().equals("class com.example.demo.entities.Antibody");
     }
 
@@ -48,6 +49,7 @@ public class Board{
      * @return true if grid[x][y] is actually antibody, otherwise, false.
      */
     public static boolean IsAntibody(int x,int y){
+        if(grid[x][y]==null) return false;
         return grid[x][y].getClass().toString().equals("class com.example.demo.entities.Virus");
     }
 

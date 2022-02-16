@@ -9,6 +9,10 @@ public class Antibody implements Entity {
     private String geneticCode;
     private Pair<Integer,Integer> location;
 
+    public Antibody(Pair<Integer,Integer> location){
+        this.location = location;
+    }
+
     @Override
     public String getCode() {
         return this.geneticCode;

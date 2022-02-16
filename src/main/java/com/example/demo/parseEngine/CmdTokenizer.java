@@ -34,6 +34,7 @@ public class CmdTokenizer implements Tokenizer{
         StringBuilder s = new StringBuilder();
         while (pos < cmd.length() && Character.isWhitespace(cmd.charAt(pos)))
             pos++;  // ignore whitespace
+        if(pos==cmd.length()) return;
         char c = cmd.charAt(pos);
         if (Character.isDigit(c)) {  // start of number
             s.append(c);
@@ -44,10 +45,13 @@ public class CmdTokenizer implements Tokenizer{
         else if (Character.isLetter(c)) {  // start of string
             s.append(c);
             for (pos++; pos < cmd.length() &&
-                    Character.isLetter(cmd.charAt(pos)); pos++)
+                    Character.isLetter(cmd.charAt(pos)) ||
+                    Character.isDigit(cmd.charAt(pos)); pos++) {
                 s.append(cmd.charAt(pos));
+                if (pos == cmd.length()-1) break;
+            }
         }
-        else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == '(' || c == ')' || c == '^') {
+        else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == '(' || c == ')' || c == '^' || c == '=') {
             s.append(c);
             pos++;
         }

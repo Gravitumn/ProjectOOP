@@ -1,28 +1,33 @@
 package com.example.demo.parseEngine;
 
+import com.example.demo.entities.Antibody;
 import com.example.demo.entities.Entity;
 import com.example.demo.gameState.Board;
+import com.example.demo.utility.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Random;
 
 public class CmdParser{
     private CmdTokenizer tkz;
     private Map<String, Integer> vars;
     Factory factory;
     private final Entity current_unit;
+    private Random rng;
 
     private final ArrayList<String> reservedWord = new ArrayList<>(
             Arrays.asList("antibody","down","downleft","downright","else","if","left","move","nearby","right","shoot",
                     "then","up","upleft","upright","virus","while")
     );
 
-    public CmdParser(Map<String, Integer> vars, Entity e) throws SyntaxErrorException {
-        this.tkz = new CmdTokenizer(e.getCode());
+    public CmdParser(Map<String, Integer> vars,String cmd,Entity e) throws SyntaxErrorException {
+        this.tkz = new CmdTokenizer(cmd);
         this.current_unit = e;
         this.vars = vars;
         factory = Factory.instance();
+        rng = new Random();
     }
 
     public void parseStatement() throws SyntaxErrorException, EvalError {
@@ -44,9 +49,9 @@ public class CmdParser{
         String next = tkz.peek();
         switch (next){
             case "shoot":
-                parseActionCmd();
             case "move" :
                 parseActionCmd();
+                break;
             default :
                 parseAssignmentStatement();
         }
@@ -61,7 +66,13 @@ public class CmdParser{
 
         tkz.consume("=");
         Expr value = parseExpr();//value
-        vars.put(next,value.eval(vars));
+
+        //exclusive for when someone tries to assign its value into something else
+        if(!next.equals("random")) {
+            int random = rng.nextInt(100);
+            vars.put("random",random);
+            vars.put(next, value.eval(vars));
+        }
     }
 
     public void parseActionCmd() throws SyntaxErrorException {
@@ -69,6 +80,7 @@ public class CmdParser{
         switch (next){
             case "shoot" :
                 parseATK();
+                break;
             case "move" :
                 parseMove();
         }
@@ -268,7 +280,7 @@ public class CmdParser{
         if (!Character.isLetter(ac[0]))
             return false;
         for(char i : ac){
-            if(!Character.isLetter(i) || !Character.isDigit(i)){
+            if(!Character.isLetter(i) && !Character.isDigit(i)){
                 return false;
             }
         }
