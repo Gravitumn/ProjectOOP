@@ -14,12 +14,13 @@ public class Board{
     static int x;
     static int y;
     private static Entity[][] grid;
-    private static LinkedList<Entity> queue = new LinkedList<>();
+    private static LinkedList<Entity> queue;
 
     public Board(int m,int n){
         Board.x = m;
         Board.y = n;
         grid = new Entity[n][m];
+        queue = new LinkedList<>();
     }
 
     public static Entity getEntity(int x,int y){

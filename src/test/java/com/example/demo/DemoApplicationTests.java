@@ -20,20 +20,10 @@ class DemoApplicationTests {
     void programParsingTest() throws SyntaxErrorException, EvalError {
         Entity e = new Antibody("",new Pair<>(2, 2));
         CmdParser cp = new CmdParser(null,"",e);
-        try {
-            cp.parseProgram();
-            throw new Exception("not working as intended");
-        }catch (Exception ex){
-            System.out.println("This one is illegal.");
-        }
+        parseWithErrors(cp,"This one is illegal.");
 
         CmdParser cp1 = new CmdParser(null,"where's my money",e);
-        try {
-            cp1.parseProgram();
-            throw new Exception("kek");
-        }catch (Exception ex){
-            System.out.println("illegal.");
-        }
+        parseWithErrors(cp1,"Illegal.");
     }
 
     @Test
@@ -49,48 +39,23 @@ class DemoApplicationTests {
         System.out.println("eh12 = " + vars.get("eh12"));
 
         CmdParser cp3 = new CmdParser(vars, "ok! = 22222", e);                //"alien char included"
-        try {
-            cp3.parseStatement(true);
-            throw new Exception("not working as intended");
-        } catch (Exception ex) {
-            System.out.println("it's illegal.");
-        }
+        parseWithErrors(cp3,"It's illegal.");
 
         CmdParser cp4 = new CmdParser(vars, "ak47 444 444", null);            //no "=" in between
-        try {
-            cp4.parseStatement(true);
-            throw new Exception("not working as intended");
-        } catch (Exception ex) {
-            System.out.println("This one is also illegal");
-        }
+        parseWithErrors(cp4,"This one is also illegal");
 
         CmdParser cp5 = new CmdParser(vars, "12r = 555", null);                //numbers before letters
-        try {
-            cp5.parseStatement(true);
-            throw new Exception("not working as intended");
-        } catch (Exception ex) {
-            System.out.println("And this one is illegal too");
-        }
+        parseWithErrors(cp5,"And this one is illegal too.");
 
         CmdParser cp6 = new CmdParser(vars,"aa = 100 b = 10+aa",null);             //2 vars assignments
         cp6.parseProgram();
         System.out.println("aa = " + vars.get("aa") + " " + "\nb = " + vars.get("b"));
 
         CmdParser cp7 = new CmdParser(vars,"a =",null);                             //nothing after =
-        try{
-            cp7.parseProgram();
-            throw new Exception("Not working as intended");
-        }catch (Exception ex){
-            System.out.println("Confirmed to be illegal.");
-        }
+        parseWithErrors(cp7,"Confirmed to be illegal.");
 
         CmdParser cp8 = new CmdParser(vars,"aee = topkek topkek = 20",null);                             //assignment using a var not assigned before
-        try{
-            cp8.parseProgram();
-            throw new Exception("Not working as intended");
-        }catch (Exception ex){
-            System.out.println("Caught committing a crime.");
-        }
+        parseWithErrors(cp8,"Caught committing a crime.");
     }
 
     @Test
@@ -104,36 +69,16 @@ class DemoApplicationTests {
         System.out.println("Entity went right");
 
         CmdParser cp1 = new CmdParser(vars, "move kek", e);                //direction not one of eight directions
-        try {
-            cp1.parseProgram();
-            throw new Exception("not working as intended");
-        } catch (Exception ex) {
-            System.out.println("WHICH WAY!?!?");
-        }
+        parseWithErrors(cp1,"WHICH WAY!?!?!");
 
         CmdParser cp1_e = new CmdParser(vars, "move", e);                //no direction
-        try {
-            cp1_e.parseProgram();
-            throw new Exception("not working as intended");
-        } catch (Exception ex) {
-            System.out.println("illegal.");
-        }
+        parseWithErrors(cp1_e,"move to which direction?");
 
         CmdParser cp1_1 = new CmdParser(vars, "shoot this guy", e);         //direction not one of eight directions
-        try {
-            cp1_1.parseProgram();
-            throw new Exception("not working as intended");
-        } catch (Exception ex) {
-            System.out.println("who to shoot at?");
-        }
+        parseWithErrors(cp1_1,"but where to?");
 
         CmdParser cp1_11 = new CmdParser(vars, "shoot", e);         //no direction
-        try {
-            cp1_11.parseProgram();
-            throw new Exception("not working as intended");
-        } catch (Exception ex) {
-            System.out.println("where do you want to shoot?");
-        }
+        parseWithErrors(cp1_11,"where to shoot?");
 
         CmdParser cp2 = new CmdParser(vars, "shoot down", e);            //tests shoot
         cp2.parseProgram();
@@ -146,28 +91,14 @@ class DemoApplicationTests {
     void blockTest() throws SyntaxErrorException, EvalError {
         Map<String, Integer> vars = new HashMap<>();
         Entity e = new Antibody("",new Pair<>(2, 2));
-        CmdParser cp = new CmdParser(vars, "{}", e);
-        try{                                                        //Empty {}
-            cp.parseStatement(true);
-        } catch (SyntaxErrorException ex) {
-            System.out.println("Where statement");
-        } catch (EvalError ex) {
-            ex.printStackTrace();
-        }
+        CmdParser cp = new CmdParser(vars, "{}", e);            //Empty {}
+        parseWithErrors(cp,"emty");
 
         CmdParser cp1 = new CmdParser(vars,"}",e);              //{ missing
-        try{
-            cp1.parseStatement(true);
-        }catch (Exception ex){
-            System.out.println("Illegal");
-        }
+        parseWithErrors(cp1,"Illegal");
 
         CmdParser cp2 = new CmdParser(vars,"{",e);              //} missing
-        try{
-            cp1.parseStatement(true);
-        }catch (Exception ex){
-            System.out.println("Illegal");
-        }
+        parseWithErrors(cp2,"Also illegal");
 
         CmdParser cp3 = new CmdParser(vars,"{a = 4 b = 13*a c = b^a}",e);   //multiple assignments
         cp3.parseProgram();
@@ -177,12 +108,46 @@ class DemoApplicationTests {
     }
 
     @Test
-    void ifTest(){
+    void ifTest() throws SyntaxErrorException {
+        Entity e = new Antibody("",new Pair<>(3,3));
+        Map<String,Integer> vars = new HashMap<>();
+        vars.put("tester",10);
+
+        CmdParser cp = new CmdParser(vars,"if",e);                                      //if not followed by anything
+        parseWithErrors(cp,"Illegal, m8");
+
+        CmdParser cp1 = new CmdParser(vars,"if Faily wasn't killed",e);                 //if followed by anything not syntax-legal
+        parseWithErrors(cp1,"if what");
+
+        CmdParser cp2 = new CmdParser(vars,"if (",e);                                   //if with () but it misses a statement and )
+        parseWithErrors(cp2,"what's after (");
+
+        CmdParser cp3 = new CmdParser(vars,"if (tester",e);
+        parseWithErrors(cp3,"not closed :(");
+
 
     }
 
     @Test
     void whileTest(){
 
+    }
+
+    /**
+     * <p>Parses something with error(s) in the command to get an error. If an exception occurs,
+     * the parser terminates, showing a message from {@code errMsg}.</p>
+     *
+     * <p>Side effect: if an error message does not appear, throw an exception to notify
+     * the parser does not fail as intended.</p>
+     * @param cp a parser to be used for tests
+     * @param errMsg a message to indicate if an error happens due to syntax during parsing
+     */
+    private void parseWithErrors(CmdParser cp,String errMsg){
+        try {
+            cp.parseProgram();
+            throw new Exception("not working as intended");
+        }catch (Exception ex){
+            System.out.println(errMsg);
+        }
     }
 }
