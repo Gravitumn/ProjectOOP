@@ -50,4 +50,12 @@ public interface Entity {
      * @return  distance between entity e and the founded antibody, return 0 if not found.
      */
     int nearbyAntibody() throws SyntaxErrorException;
+
+
+    /**
+     * perform an action that this unit got attacked by an Entity(attacker).
+     * @param attacker the entity which attacked this entity.
+     * @Side-effect Decrease this entity's health. this entity will be deleted if hp reaches 0.
+     */
+    void attacked(Entity attacker);
 }

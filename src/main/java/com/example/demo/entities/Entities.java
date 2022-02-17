@@ -3,6 +3,7 @@ package com.example.demo.entities;
 import com.example.demo.gameState.Board;
 import com.example.demo.parseEngine.Factory;
 import com.example.demo.parseEngine.SyntaxErrorException;
+import com.example.demo.utility.Increment;
 import com.example.demo.utility.Pair;
 
 import java.util.ArrayList;
@@ -47,7 +48,18 @@ public class Entities implements Entity {
 
     @Override
     public void Attack(int direction) throws SyntaxErrorException {
+        int distance = nearbyEntity(direction);
+        int startX = this.location.fst();
+        int startY = this.location.snd();
+        if(distance!=0) {
+            int xIncrement = factory.newIncrement(direction).xIncrement();
+            int yIncrement = factory.newIncrement(direction).yIncrement();
+            int targetX = startX + (distance * xIncrement);
+            int targetY = startY + (distance * yIncrement);
 
+            Entity target = Board.getEntity(targetX,targetY);
+            target.attacked(this);
+        }
     }
 
     @Override
@@ -127,5 +139,10 @@ public class Entities implements Entity {
             return 0;
         else
             return Collections.min(distance);
+    }
+
+    @Override
+    public void attacked(Entity attacker) {
+
     }
 }

@@ -105,6 +105,7 @@ public class CmdParser{
     public void parseATK() throws SyntaxErrorException {
         tkz.consume("shoot");
         int direction = parseDirection();
+        current_unit.Attack(direction);
     }
 
     public Integer parseDirection() throws SyntaxErrorException {

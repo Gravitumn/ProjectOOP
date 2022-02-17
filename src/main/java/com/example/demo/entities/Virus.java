@@ -14,5 +14,4 @@ public class Virus extends Entities {
     public Virus(String geneticCode,Pair<Integer,Integer> location){
         super(geneticCode,location);
     }
-
 }
