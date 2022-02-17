@@ -51,7 +51,9 @@ public class CmdTokenizer implements Tokenizer{
                 if (pos == cmd.length()-1) break;
             }
         }
-        else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == '(' || c == ')' || c == '^' || c == '=') {
+        else if (c == '+' || c == '-' || c == '*' || c == '/'
+                || c == '%' || c == '(' || c == ')' || c == '^'
+                || c == '=' || c == '{' || c == '}') {
             s.append(c);
             pos++;
         }

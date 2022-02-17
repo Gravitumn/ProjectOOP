@@ -10,13 +10,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Virus extends Entities {
-    private Factory factory = Factory.instance();
-    private String geneticCode;
-    private Pair<Integer,Integer> location;
 
-    public Virus(String geneticCode,Pair<Integer,Integer> firstloc){
-        this.geneticCode = geneticCode;
-        this.location = firstloc;
+    public Virus(String geneticCode,Pair<Integer,Integer> location){
+        super(geneticCode,location);
     }
 
 }

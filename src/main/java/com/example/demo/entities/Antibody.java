@@ -7,10 +7,7 @@ import com.example.demo.utility.Pair;
 
 public class Antibody extends Entities{
     private Factory factory = Factory.instance();
-    private String geneticCode;
-    private Pair<Integer,Integer> location;
-
-    public Antibody(Pair<Integer,Integer> location){
-        this.location = location;
+    public Antibody(String geneticCode,Pair<Integer,Integer> location){
+        super(geneticCode,location);
     }
 }
