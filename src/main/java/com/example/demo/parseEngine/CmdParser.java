@@ -30,6 +30,15 @@ public class CmdParser{
         rng = new Random();
     }
 
+    public void parseProgram() throws SyntaxErrorException, EvalError {
+        if(tkz.peek("")){
+            blame("There are noting...");
+        }
+        while (!tkz.atEndOfSauce()){
+            parseStatement();
+        }
+    }
+
     public void parseStatement() throws SyntaxErrorException, EvalError {
         String next = tkz.peek();
         switch (next){
