@@ -3,7 +3,6 @@ package com.example.demo.entities;
 import com.example.demo.gameState.Board;
 import com.example.demo.parseEngine.Factory;
 import com.example.demo.parseEngine.SyntaxErrorException;
-import com.example.demo.utility.Increment;
 import com.example.demo.utility.Pair;
 
 import java.util.ArrayList;
@@ -11,13 +10,17 @@ import java.util.Collections;
 
 public class Entities implements Entity {
 
-    private Factory factory = Factory.instance();
+    protected final int atk = 10;
+    protected int hp = 100;
+    private final Factory factory = Factory.instance();
     private String geneticCode;
     private Pair<Integer,Integer> location;
 
     public Entities(String geneticCode,Pair<Integer,Integer> location){
-        this.geneticCode = geneticCode;
-        this.location = location;
+        if(Board.addEntity(this,location)) {
+            this.geneticCode = geneticCode;
+            this.location = location;
+        }
     }
 
     @Override
@@ -142,7 +145,12 @@ public class Entities implements Entity {
     }
 
     @Override
-    public void attacked(Entity attacker) {
+    public int getAtk(){
+        return this.atk;
+    }
 
+    @Override
+    public void attacked(Entity attacker) {
+        this.hp -= attacker.getAtk();
     }
 }

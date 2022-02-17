@@ -23,7 +23,13 @@ public class Board{
     }
 
     public static Entity getEntity(int x,int y){
-        return grid[x][y];
+        Entity e = null;
+        try{
+           e = grid[x][y];
+           return e;
+        }catch (ArrayIndexOutOfBoundsException | NullPointerException err){
+            throw new RuntimeException("Cannot locate entity outside grid range.");
+        }
     }
 
     /**
@@ -44,7 +50,7 @@ public class Board{
      */
     public static boolean IsVirus(int x,int y){
         if(grid[x][y]==null) return false;
-        return grid[x][y].getClass().toString().equals("class com.example.demo.entities.Antibody");
+        return grid[x][y]instanceof Virus;
     }
 
     /**
@@ -55,7 +61,7 @@ public class Board{
      */
     public static boolean IsAntibody(int x,int y){
         if(grid[x][y]==null) return false;
-        return grid[x][y].getClass().toString().equals("class com.example.demo.entities.Virus");
+        return grid[x][y]instanceof Antibody;
     }
 
     /**
@@ -63,9 +69,13 @@ public class Board{
      * @param e Specific entity
      * @param location pair of x coordinate and y coordinate.
      */
-    public static void addEntity(Entity e, Pair<Integer,Integer> location){
-        queue.add(e);
-        grid[location.fst()][location.snd()] = e;
+    public static boolean addEntity(Entity e, Pair<Integer,Integer> location){
+        if(isAvailable(location)) {
+            queue.add(e);
+            grid[location.fst()][location.snd()] = e;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -77,9 +87,7 @@ public class Board{
      * Side-effect : upon returning true, change location of this entity.
      */
     public static boolean move(Entity e,Pair<Integer,Integer> newLocation){
-        if(!IsVirus(newLocation.fst(), newLocation.snd()) && !IsAntibody(newLocation.fst(), newLocation.snd()) &&
-                newLocation.fst() >= 0 && newLocation.fst() <= x &&
-                newLocation.snd() >= 0 && newLocation.snd() <= y)
+        if(isAvailable(newLocation))
         {
             grid[newLocation.fst()][newLocation.snd()] = e;
             return true;
@@ -89,5 +97,12 @@ public class Board{
 
     public static Pair<Integer,Integer> size(){
         return factory.newPair(Board.x,Board.y);
+    }
+
+    private static boolean isAvailable(Pair<Integer,Integer> location){
+        return location.fst() >= 0 && location.fst() <= x &&
+                location.snd() >= 0 && location.snd() <= y &&
+                !IsVirus(location.fst(), location.snd()) &&
+                !IsAntibody(location.fst(), location.snd());
     }
 }

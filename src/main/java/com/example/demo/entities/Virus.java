@@ -11,7 +11,10 @@ import java.util.Collections;
 
 public class Virus extends Entities {
 
+    public int lifeGain = 5;
+
     public Virus(String geneticCode,Pair<Integer,Integer> location){
         super(geneticCode,location);
+        this.hp += lifeGain;
     }
 }

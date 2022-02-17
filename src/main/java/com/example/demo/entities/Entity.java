@@ -58,4 +58,10 @@ public interface Entity {
      * @Side-effect Decrease this entity's health. this entity will be deleted if hp reaches 0.
      */
     void attacked(Entity attacker);
+
+    /**
+     *
+     * @return atk of this entity.
+     */
+    int getAtk();
 }
