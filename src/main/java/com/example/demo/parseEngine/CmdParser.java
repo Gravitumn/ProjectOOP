@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class CmdParser{
     private CmdTokenizer tkz;
-    private Map<String, Integer> vars;
+    public Map<String, Integer> vars;
     Factory factory;
     private final Entity current_unit;
     private Random rng;
@@ -44,10 +44,13 @@ public class CmdParser{
         switch (next){
             case "{" :
                 parseBlock(exist);
+                break;
             case "if" :
                 parseIf(exist);
+                break;
             case "while" :
                 parseWhile(exist);
+                break;
             default :
                 parseCommand(exist);
         }
@@ -58,6 +61,8 @@ public class CmdParser{
         String next = tkz.peek();
         switch (next){
             case "shoot":
+                parseATK(exist);
+                break;
             case "move" :
                 parseActionCmd(exist);
                 break;
@@ -90,6 +95,7 @@ public class CmdParser{
                 break;
             case "move" :
                 parseMove(exist);
+                break;
         }
     }
 
@@ -111,8 +117,7 @@ public class CmdParser{
     }
 
     public Integer parseDirection() throws SyntaxErrorException {
-        String next = tkz.peek();
-        //left blank for now - out of ideas
+        String next = tkz.consume();
         switch(next){
             case "up":
                 return 1;

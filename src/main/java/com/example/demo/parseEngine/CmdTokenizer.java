@@ -32,35 +32,36 @@ public class CmdTokenizer implements Tokenizer{
 
     public void getNext() throws SyntaxErrorException {
         StringBuilder s = new StringBuilder();
-        while (pos < cmd.length() && Character.isWhitespace(cmd.charAt(pos)))
-            pos++;  // ignore whitespace
-        if(pos==cmd.length()) return;
-        char c = cmd.charAt(pos);
-        if (Character.isDigit(c)) {  // start of number
-            s.append(c);
-            for (pos++; pos < cmd.length() &&
-                    Character.isDigit(cmd.charAt(pos)); pos++)
-                s.append(cmd.charAt(pos));
-        }
-        else if (Character.isLetter(c)) {  // start of string
-            s.append(c);
-            for (pos++; pos < cmd.length() &&
-                    Character.isLetter(cmd.charAt(pos)) ||
-                    Character.isDigit(cmd.charAt(pos)); pos++) {
-                s.append(cmd.charAt(pos));
-                if (pos == cmd.length()-1) break;
+        if(pos < cmd.length()-1) {
+            while (pos < cmd.length() && Character.isWhitespace(cmd.charAt(pos)))
+                pos++;  // ignore whitespace
+            if (pos == cmd.length()) return;
+            char c = cmd.charAt(pos);
+            if (Character.isDigit(c)) {  // start of number
+                s.append(c);
+                for (pos++; pos < cmd.length() &&
+                        Character.isDigit(cmd.charAt(pos)); pos++)
+                    s.append(cmd.charAt(pos));
+            } else if (Character.isLetter(c)) {  // start of string
+                s.append(c);
+                for (pos++; pos < cmd.length() &&
+                        Character.isLetter(cmd.charAt(pos)) ||
+                        Character.isDigit(cmd.charAt(pos)); pos++) {
+                    s.append(cmd.charAt(pos));
+                    if (pos == cmd.length() - 1) {
+                        pos++;
+                        break;}
+                }
+            } else if (c == '+' || c == '-' || c == '*' || c == '/'
+                    || c == '%' || c == '(' || c == ')' || c == '^'
+                    || c == '=' || c == '{' || c == '}') {
+                s.append(c);
+                pos++;
+            } else {
+                throw new SyntaxErrorException("unknown character: " + c);
             }
+            next = s.toString();
         }
-        else if (c == '+' || c == '-' || c == '*' || c == '/'
-                || c == '%' || c == '(' || c == ')' || c == '^'
-                || c == '=' || c == '{' || c == '}') {
-            s.append(c);
-            pos++;
-        }
-        else {
-            throw new SyntaxErrorException("unknown character: " + c);
-        }
-        next = s.toString();
 
     }
 
