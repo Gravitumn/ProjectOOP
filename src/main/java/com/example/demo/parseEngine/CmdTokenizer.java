@@ -61,6 +61,7 @@ public class CmdTokenizer implements Tokenizer{
             throw new SyntaxErrorException("unknown character: " + c);
         }
         next = s.toString();
+
     }
 
     //verifies if it reaches the end

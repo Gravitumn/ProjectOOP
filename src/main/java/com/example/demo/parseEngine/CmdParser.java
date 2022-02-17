@@ -35,39 +35,39 @@ public class CmdParser{
             blame("There are noting...");
         }
         while (!tkz.atEndOfSauce()){
-            parseStatement();
+            parseStatement(true);
         }
     }
 
-    public void parseStatement() throws SyntaxErrorException, EvalError {
+    public void parseStatement(boolean exist) throws SyntaxErrorException, EvalError {
         String next = tkz.peek();
         switch (next){
             case "{" :
-                parseBlock();
+                parseBlock(exist);
             case "if" :
-                parseIf();
+                parseIf(exist);
             case "while" :
-                parseWhile();
+                parseWhile(exist);
             default :
-                parseCommand();
+                parseCommand(exist);
         }
     }
 
 
-    public void parseCommand() throws SyntaxErrorException, EvalError {
+    public void parseCommand(boolean exist) throws SyntaxErrorException, EvalError {
         String next = tkz.peek();
         switch (next){
             case "shoot":
             case "move" :
-                parseActionCmd();
+                parseActionCmd(exist);
                 break;
             default :
-                parseAssignmentStatement();
+                parseAssignmentStatement(exist);
         }
 
     }
 
-    public void parseAssignmentStatement() throws SyntaxErrorException, EvalError {
+    public void parseAssignmentStatement(boolean exist) throws SyntaxErrorException, EvalError {
         String next = tkz.consume();                                //var's name
         //checks for reserved words and character outside of letters
         if (!isVariable(next)) throw new SyntaxErrorException("Variable must start with letter followed by alphanumeric Character.");
@@ -77,35 +77,37 @@ public class CmdParser{
         Expr value = parseExpr();//value
 
         //exclusive for when someone tries to assign its value into something else
-        if(!next.equals("random")) {
-            int random = rng.nextInt(100);
-            vars.put("random",random);
+        if(exist){
             vars.put(next, value.eval(vars));
         }
     }
 
-    public void parseActionCmd() throws SyntaxErrorException {
+    public void parseActionCmd(boolean exist) throws SyntaxErrorException {
         String next = tkz.peek();
         switch (next){
             case "shoot" :
-                parseATK();
+                parseATK(exist);
                 break;
             case "move" :
-                parseMove();
+                parseMove(exist);
         }
     }
 
 
-    public void parseMove() throws SyntaxErrorException {
+    public void parseMove(boolean exist) throws SyntaxErrorException {
         tkz.consume("move");
         int direction = parseDirection();
-        current_unit.changeLocation(direction);
+        if (exist){
+            current_unit.changeLocation(direction);
+        }
     }
 
-    public void parseATK() throws SyntaxErrorException {
+    public void parseATK(boolean exist) throws SyntaxErrorException {
         tkz.consume("shoot");
         int direction = parseDirection();
-        current_unit.Attack(direction);
+        if (exist){
+            current_unit.Attack(direction);
+        }
     }
 
     public Integer parseDirection() throws SyntaxErrorException {
@@ -134,47 +136,39 @@ public class CmdParser{
         return null;
     }
 
-    public void parseIf() throws SyntaxErrorException, EvalError {
+    public void parseIf(boolean exist) throws SyntaxErrorException, EvalError {
         tkz.consume("if");
         tkz.consume("(");
         Expr ex = parseExpr();
         tkz.consume(")");
-        if(ex.eval(vars) >= 0){
-            tkz.consume("then");
-            parseStatement();
+        boolean condition;
+        if(ex.eval(vars) > 0 && exist){
+            condition=true;
         }
-        //now how can we parse else?
-        else{
-            if(tkz.peek("shoot") || tkz.peek("move")) {
-                tkz.consume();
-                tkz.consume();
-            }else if(tkz.peek("")){
+        else
+            condition=false;
+        tkz.consume("then");
+        parseStatement(condition);
+        tkz.consume("else");
+        parseStatement(!condition);
 
-            }else blame("Unknown error");
-
-            tkz.consume("else");
-            parseStatement();
-        }
-//        parseStatement();
-//        if(tkz.peek("else")) tkz.consume();
-//        parseStatement();
     }
 
-    public void parseWhile() throws SyntaxErrorException, EvalError {
+    public void parseWhile(boolean exist) throws SyntaxErrorException, EvalError {
         tkz.consume("while");
         tkz.consume("(");
         Expr ex = parseExpr();
         tkz.consume(")");
         for(int i=0;i<1000 && ex.eval(vars)>0;i++){
-            parseStatement();
+            parseStatement(exist);
         }
 
     }
 
-    public void parseBlock() throws SyntaxErrorException, EvalError {
+    public void parseBlock(boolean exist) throws SyntaxErrorException, EvalError {
         tkz.consume("{");
         while(!tkz.peek("}")){                  //this runs until it reaches }
-            parseStatement();
+            parseStatement(exist);
         }
         tkz.consume("}");
     }
