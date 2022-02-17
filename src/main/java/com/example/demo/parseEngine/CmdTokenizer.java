@@ -32,7 +32,7 @@ public class CmdTokenizer implements Tokenizer{
 
     public void getNext() throws SyntaxErrorException {
         StringBuilder s = new StringBuilder();
-        if(pos < cmd.length()-1) {
+        if(pos < cmd.length()) {
             while (pos < cmd.length() && Character.isWhitespace(cmd.charAt(pos)))
                 pos++;  // ignore whitespace
             if (pos == cmd.length()) return;

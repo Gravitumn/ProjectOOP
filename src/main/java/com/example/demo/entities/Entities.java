@@ -79,7 +79,8 @@ public class Entities implements Entity {
         while(!Board.IsVirus(startX,startY) && !Board.IsAntibody(startX,startY)){
             startX+=xIncrement;
             startY+=yIncrement;
-            if(startX > boardSize.fst() || startY > boardSize.snd() || startX < 0 || startY < 0){
+            if(startX > boardSize.fst() || startY > boardSize.snd() || startX < 0 || startY < 0 ||
+                    startX==boardSize.fst()-1 || startY== boardSize.snd()-1){
                 return 0;
             }
         }

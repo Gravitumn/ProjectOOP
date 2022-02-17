@@ -16,14 +16,12 @@ import java.util.Map;
 @SpringBootTest
 class DemoApplicationTests {
 
-
-
     @Test
     void programParsingTest() throws SyntaxErrorException, EvalError {
         Entity e = new Antibody("",new Pair<>(2, 2));
         CmdParser cp = new CmdParser(null,"",e);
         try {
-            cp.parseStatement(true);
+            cp.parseProgram();
             throw new Exception("not working as intended");
         }catch (Exception ex){
             System.out.println("This one is illegal.");
@@ -31,7 +29,7 @@ class DemoApplicationTests {
 
         CmdParser cp1 = new CmdParser(null,"where's my money",e);
         try {
-            cp1.parseStatement(true);
+            cp1.parseProgram();
             throw new Exception("kek");
         }catch (Exception ex){
             System.out.println("illegal.");
@@ -73,6 +71,26 @@ class DemoApplicationTests {
         } catch (Exception ex) {
             System.out.println("And this one is illegal too");
         }
+
+        CmdParser cp6 = new CmdParser(vars,"aa = 100 b = 10+aa",null);             //2 vars assignments
+        cp6.parseProgram();
+        System.out.println("aa = " + vars.get("aa") + " " + "\nb = " + vars.get("b"));
+
+        CmdParser cp7 = new CmdParser(vars,"a =",null);                             //nothing after =
+        try{
+            cp7.parseProgram();
+            throw new Exception("Not working as intended");
+        }catch (Exception ex){
+            System.out.println("Confirmed to be illegal.");
+        }
+
+        CmdParser cp8 = new CmdParser(vars,"aee = topkek topkek = 20",null);                             //assignment using a var not assigned before
+        try{
+            cp8.parseProgram();
+            throw new Exception("Not working as intended");
+        }catch (Exception ex){
+            System.out.println("Caught committing a crime.");
+        }
     }
 
     @Test
@@ -87,14 +105,41 @@ class DemoApplicationTests {
 
         CmdParser cp1 = new CmdParser(vars, "move kek", e);                //direction not one of eight directions
         try {
-            cp1.parseStatement(true);
+            cp1.parseProgram();
+            throw new Exception("not working as intended");
+        } catch (Exception ex) {
+            System.out.println("WHICH WAY!?!?");
+        }
+
+        CmdParser cp1_e = new CmdParser(vars, "move", e);                //no direction
+        try {
+            cp1_e.parseProgram();
             throw new Exception("not working as intended");
         } catch (Exception ex) {
             System.out.println("illegal.");
         }
 
-        CmdParser cp2 = new CmdParser(vars, "shoot down", e);            //tests shoot - still WIP
-        cp2.parseStatement(true);
+        CmdParser cp1_1 = new CmdParser(vars, "shoot this guy", e);         //direction not one of eight directions
+        try {
+            cp1_1.parseProgram();
+            throw new Exception("not working as intended");
+        } catch (Exception ex) {
+            System.out.println("who to shoot at?");
+        }
+
+        CmdParser cp1_11 = new CmdParser(vars, "shoot", e);         //no direction
+        try {
+            cp1_11.parseProgram();
+            throw new Exception("not working as intended");
+        } catch (Exception ex) {
+            System.out.println("where do you want to shoot?");
+        }
+
+        CmdParser cp2 = new CmdParser(vars, "shoot down", e);            //tests shoot
+        cp2.parseProgram();
+
+        CmdParser cp3 = new CmdParser(vars,"move up move downright", e);
+        cp3.parseProgram();
     }
 
     @Test
@@ -123,6 +168,21 @@ class DemoApplicationTests {
         }catch (Exception ex){
             System.out.println("Illegal");
         }
+
+        CmdParser cp3 = new CmdParser(vars,"{a = 4 b = 13*a c = b^a}",e);   //multiple assignments
+        cp3.parseProgram();
+        System.out.println("a = " + vars.get("a"));
+        System.out.println("b = " + vars.get("b"));
+        System.out.println("c = " + vars.get("c"));
     }
 
+    @Test
+    void ifTest(){
+
+    }
+
+    @Test
+    void whileTest(){
+
+    }
 }
