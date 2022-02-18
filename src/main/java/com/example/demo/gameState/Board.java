@@ -26,7 +26,7 @@ public class Board{
     public static Entity getEntity(int x,int y){
         Entity e = null;
         try{
-           e = grid[x][y];
+           e = grid[y][x];
            return e;
         }catch (ArrayIndexOutOfBoundsException | NullPointerException err){
             throw new RuntimeException("Cannot locate entity outside grid range.");
@@ -50,8 +50,8 @@ public class Board{
      * @return true if grid[x][y] is actually virus, otherwise, false.
      */
     public static boolean IsVirus(int x,int y){
-        if(grid[x][y]==null) return false;
-        return grid[x][y]instanceof Virus;
+        if(grid[y][x]==null) return false;
+        return grid[y][x]instanceof Virus;
     }
 
     /**
@@ -61,8 +61,8 @@ public class Board{
      * @return true if grid[x][y] is actually antibody, otherwise, false.
      */
     public static boolean IsAntibody(int x,int y){
-        if(grid[x][y]==null) return false;
-        return grid[x][y]instanceof Antibody;
+        if(grid[y][x]==null) return false;
+        return grid[y][x]instanceof Antibody;
     }
 
     /**
@@ -73,7 +73,7 @@ public class Board{
     public static boolean addEntity(Entity e, Pair<Integer,Integer> location){
         if(isAvailable(location)) {
             queue.add(e);
-            grid[location.fst()][location.snd()] = e;
+            grid[location.snd()][location.fst()] = e;
             return true;
         }
         return false;
@@ -90,7 +90,7 @@ public class Board{
     public static boolean move(Entity e,Pair<Integer,Integer> newLocation){
         if(isAvailable(newLocation))
         {
-            grid[newLocation.fst()][newLocation.snd()] = e;
+            grid[newLocation.snd()][newLocation.fst()] = e;
             return true;
         }
         else return false;
@@ -105,5 +105,8 @@ public class Board{
                 location.snd() >= 0 && location.snd() <= y &&
                 !IsVirus(location.fst(), location.snd()) &&
                 !IsAntibody(location.fst(), location.snd());
+    }
+
+    public static void delete(Entity e){
     }
 }
