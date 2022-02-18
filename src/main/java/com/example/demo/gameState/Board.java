@@ -108,5 +108,10 @@ public class Board{
     }
 
     public static void delete(Entity e){
+        int xCoordinate = e.getLocation().fst();
+        int yCoordinate = e.getLocation().snd();
+
+        grid[yCoordinate][xCoordinate] = null;
+        queue.remove(e);
     }
 }
