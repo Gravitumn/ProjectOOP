@@ -10,27 +10,18 @@ import java.util.Collections;
 
 public class Entities implements Entity {
 
-    protected final int atk = 10;
-    protected int hp = 100;
-    private final Factory factory = Factory.instance();
-    private String geneticCode;
-    private Pair<Integer,Integer> location;
+    protected static int atk;
+    protected int hp;
+    protected static int maxHp;
+    protected final Factory factory = Factory.instance();
+    protected String geneticCode;
+    protected Pair<Integer,Integer> location;
 
     public Entities(String geneticCode,Pair<Integer,Integer> location){
         if(Board.addEntity(this,location)) {
             this.geneticCode = geneticCode;
             this.location = location;
         }
-    }
-
-    @Override
-    public String getCode() {
-        return this.geneticCode;
-    }
-
-    @Override
-    public Pair<Integer, Integer> getLocation() {
-        return this.location;
     }
 
     @Override
@@ -50,7 +41,7 @@ public class Entities implements Entity {
     }
 
     @Override
-    public void Attack(int direction) throws SyntaxErrorException {
+    public boolean Attack(int direction) throws SyntaxErrorException {
         int distance = nearbyEntity(direction);
         int startX = this.location.fst();
         int startY = this.location.snd();
@@ -61,8 +52,9 @@ public class Entities implements Entity {
             int targetY = startY + (distance * yIncrement);
 
             Entity target = Board.getEntity(targetX,targetY);
-            target.attacked(this);
+            return target.attacked(this);
         }
+        return false;   //return false when no target found.
     }
 
     @Override
@@ -146,12 +138,39 @@ public class Entities implements Entity {
     }
 
     @Override
-    public int getAtk(){
-        return this.atk;
+    public boolean attacked(Entity attacker) {
+        this.hp -= attacker.getAtk();
+        return this.hp <= 0;    //return true when hp reach 0.
+    }
+
+    //------------------------------------------------ setter & getter ------------------------------------------------
+
+    @Override
+    public String getCode() {
+        return this.geneticCode;
     }
 
     @Override
-    public void attacked(Entity attacker) {
-        this.hp -= attacker.getAtk();
+    public Pair<Integer, Integer> getLocation() {
+        return this.location;
+    }
+
+
+
+    @Override
+    public int getAtk(){
+        return atk;
+    }
+
+
+    @Override
+    public void setHP(int hp) {
+        maxHp = hp;
+        this.hp = hp;
+    }
+
+    @Override
+    public void setAtk(int atk) {
+        Entities.atk = atk;
     }
 }

@@ -11,10 +11,33 @@ import java.util.Collections;
 
 public class Virus extends Entities {
 
-    public int lifeGain = 5;
+    private int lifeGain;
 
     public Virus(String geneticCode,Pair<Integer,Integer> location){
         super(geneticCode,location);
-        this.hp += lifeGain;
+    }
+
+    @Override
+    public boolean Attack(int direction) throws SyntaxErrorException {
+        int distance = nearbyEntity(direction);
+        int startX = this.location.fst();
+        int startY = this.location.snd();
+        if(distance!=0) {
+            int xIncrement = factory.newIncrement(direction).xIncrement();
+            int yIncrement = factory.newIncrement(direction).yIncrement();
+            int targetX = startX + (distance * xIncrement);
+            int targetY = startY + (distance * yIncrement);
+
+            Entity target = Board.getEntity(targetX,targetY);
+            if(target.attacked(this) && target instanceof Antibody){  //if virus killed target
+                ((Antibody) target).turnVirus(this.geneticCode);
+            }
+            return true;    //return true when attack hits
+        }
+        return false;   //return false when no target found.
+    }
+
+    public void setLifeGain(int LifeGain){
+        this.lifeGain = LifeGain;
     }
 }

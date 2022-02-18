@@ -28,8 +28,9 @@ public interface Entity {
      * perform a shoot in the given direction.
      * @param direction should be integer 1-8 for which, 1 = up , 2 = upright ,..., 8 = upleft.
      * @Side-effect The action performed to the nearest entity in the given direction.
+     * @return true if target's hp reach 0, otherwise, false.
      */
-    void Attack(int direction) throws SyntaxErrorException;
+    boolean Attack(int direction) throws SyntaxErrorException;
 
     /**
      * looking for an entity that is closest to this entity in the given direction.
@@ -56,12 +57,27 @@ public interface Entity {
      * perform an action that this unit got attacked by an Entity(attacker).
      * @param attacker the entity which attacked this entity.
      * @Side-effect Decrease this entity's health. this entity will be deleted if hp reaches 0.
+     * @return true if this entity's hp reach 0, otherwise, false.
      */
-    void attacked(Entity attacker);
+    boolean attacked(Entity attacker);
 
     /**
      *
      * @return atk of this entity.
      */
     int getAtk();
+
+    /**
+     * @param atk an Integer which describe atk of this entity.
+     * @Side-effect change this entity's atk.
+     */
+    void setAtk(int atk);
+
+    /**
+     *
+     * @param hp an Integer which describe hp of this entity.
+     * @Side-effect change this entity's hp.
+     */
+    void setHP(int hp);
+
 }
