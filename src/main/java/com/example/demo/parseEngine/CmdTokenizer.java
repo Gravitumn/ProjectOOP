@@ -9,14 +9,20 @@ public class CmdTokenizer implements Tokenizer{
     public CmdTokenizer(String cmd) throws SyntaxErrorException {
         this.cmd = cmd;
         pos = 0;
-        getNext();
+        if(cmd.length()!=0)
+            getNext();
+        else
+            next="";
     }
 
 
     @Override
     public String consume() throws SyntaxErrorException {
         String result = next;
-        getNext();
+        if(!atEndOfSauce())
+            getNext();
+        else
+            next="";
         return result;
     }
 
@@ -32,10 +38,8 @@ public class CmdTokenizer implements Tokenizer{
 
     public void getNext() throws SyntaxErrorException {
         StringBuilder s = new StringBuilder();
-        if(pos < cmd.length()) {
             while (pos < cmd.length() && Character.isWhitespace(cmd.charAt(pos)))
                 pos++;  // ignore whitespace
-            if (pos == cmd.length()) return;
             char c = cmd.charAt(pos);
             if (Character.isDigit(c)) {  // start of number
                 s.append(c);
@@ -45,12 +49,12 @@ public class CmdTokenizer implements Tokenizer{
             } else if (Character.isLetter(c)) {  // start of string
                 s.append(c);
                 for (pos++; pos < cmd.length() &&
-                        Character.isLetter(cmd.charAt(pos)) ||
-                        Character.isDigit(cmd.charAt(pos)); pos++) {
+                        (Character.isLetter(cmd.charAt(pos)) ||
+                        Character.isDigit(cmd.charAt(pos))); pos++) {
                     s.append(cmd.charAt(pos));
-                    if (pos == cmd.length() - 1) {
-                        pos++;
-                        break;}
+//                    if (pos >= cmd.length() - 1) {
+//                        pos++;
+//                        break;}
                 }
             } else if (c == '+' || c == '-' || c == '*' || c == '/'
                     || c == '%' || c == '(' || c == ')' || c == '^'
@@ -61,7 +65,6 @@ public class CmdTokenizer implements Tokenizer{
                 throw new SyntaxErrorException("unknown character: " + c);
             }
             next = s.toString();
-        }
 
     }
 

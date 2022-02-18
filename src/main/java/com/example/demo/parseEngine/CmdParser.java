@@ -227,7 +227,7 @@ public class CmdParser{
     public Expr parseFactor() throws SyntaxErrorException{
         Expr v = parsePower();
         while (tkz.peek("^")){
-            tkz.consume();
+            tkz.consume("^");
             v = factory.newArithExpr(v,"^",parsePower());
         }
         return v;
@@ -235,7 +235,6 @@ public class CmdParser{
 
 
     public Expr parsePower() throws SyntaxErrorException{
-
         if (isNumber(tkz.peek())) {
             return factory.newIntlit(Integer.parseInt(tkz.consume()));
         }
@@ -285,7 +284,7 @@ public class CmdParser{
         return true;
     }
 
-    private boolean isVariable(String str) {
+    private boolean isVariable(String str){
         char[] ac=str.toCharArray();
         if (!Character.isLetter(ac[0]))
             return false;
