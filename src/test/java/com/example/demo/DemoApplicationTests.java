@@ -164,6 +164,28 @@ class DemoApplicationTests {
 
     }
 
+    @Test
+    void parseMath() throws SyntaxErrorException, EvalError {
+        Map<String,Integer> vars = new HashMap<>();
+
+        CmdParser cp = new CmdParser(vars,"a = 100",null);
+        cp.parseProgram();
+        assertEquals(vars.get("a"),100);
+
+        cp = new CmdParser(vars,"a = 100+2344 a = 223",null);
+        cp.parseProgram();
+        assertEquals(vars.get("a"),223);
+
+        cp = new CmdParser(vars,"a = 345*676/55",null);
+        cp.parseProgram();
+        assertEquals(vars.get("a"),2420);
+
+        cp = new CmdParser(vars,"a = 34 a = a^4",null);
+        cp.parseProgram();
+        assertEquals(vars.get("a"),1336336);
+
+    }
+
     /**
      * <p>Parses something with error(s) in the command to get an error. If an exception occurs,
      * the parser terminates, showing a message from {@code errMsg}.</p>
