@@ -50,6 +50,7 @@ public class Board{
      * @return true if grid[x][y] is actually virus, otherwise, false.
      */
     public static boolean IsVirus(int x,int y){
+        if(x >= Board.x || y >= Board.y || y < 0 || x < 0)return false;
         if(grid[y][x]==null) return false;
         return grid[y][x]instanceof Virus;
     }
@@ -61,6 +62,7 @@ public class Board{
      * @return true if grid[x][y] is actually antibody, otherwise, false.
      */
     public static boolean IsAntibody(int x,int y){
+        if(x >= Board.x || y >= Board.y || y < 0 || x < 0)return false;
         if(grid[y][x]==null) return false;
         return grid[y][x]instanceof Antibody;
     }
@@ -101,8 +103,8 @@ public class Board{
     }
 
     private static boolean isAvailable(Pair<Integer,Integer> location){
-        return location.fst() >= 0 && location.fst() <= x &&
-                location.snd() >= 0 && location.snd() <= y &&
+        return location.fst() >= 0 && location.fst() < x &&
+                location.snd() >= 0 && location.snd() < y &&
                 !IsVirus(location.fst(), location.snd()) &&
                 !IsAntibody(location.fst(), location.snd());
     }
