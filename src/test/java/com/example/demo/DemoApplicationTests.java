@@ -7,17 +7,20 @@ import com.example.demo.parseEngine.CmdParser;
 import com.example.demo.parseEngine.EvalError;
 import com.example.demo.parseEngine.SyntaxErrorException;
 import com.example.demo.utility.Pair;
-import org.junit.jupiter.api.Test;
+
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 class DemoApplicationTests {
 
     @Test
-    void programParsingTest() throws SyntaxErrorException, EvalError {
+    void programParsingTest() throws SyntaxErrorException {
         Entity e = new Antibody("",new Pair<>(2, 2));
         CmdParser cp = new CmdParser(null,"",e);
         parseWithErrors(cp,"This one is illegal.");
@@ -31,12 +34,14 @@ class DemoApplicationTests {
         //checks assignmentStatement
         Entity e = new Antibody("",new Pair<>(2, 2));
         Map<String, Integer> vars = new HashMap<>();
+
         CmdParser cp1 = new CmdParser(vars, "aw = 10", e);
         cp1.parseStatement(true);
-        System.out.println("aw = " + vars.get("aw"));
+        assertEquals(vars.get("aw"),10);
+
         CmdParser cp2 = new CmdParser(vars, "eh12 = 11", e);                    //number included
         cp2.parseStatement(true);
-        System.out.println("eh12 = " + vars.get("eh12"));
+        assertEquals(vars.get("eh12"),11);
 
         CmdParser cp3 = new CmdParser(vars, "ok! = 22222", e);                //"alien char included"
         parseWithErrors(cp3,"It's illegal.");
@@ -49,7 +54,8 @@ class DemoApplicationTests {
 
         CmdParser cp6 = new CmdParser(vars,"aa = 100 b = 10+aa",null);             //2 vars assignments
         cp6.parseProgram();
-        System.out.println("aa = " + vars.get("aa") + " " + "\nb = " + vars.get("b"));
+        assertEquals(vars.get("aa"),100);
+        assertEquals(vars.get("b"),110);
 
         CmdParser cp7 = new CmdParser(vars,"a =",null);                             //nothing after =
         parseWithErrors(cp7,"Confirmed to be illegal.");
@@ -102,9 +108,9 @@ class DemoApplicationTests {
 
         CmdParser cp3 = new CmdParser(vars,"{a = 4 b = 13*a c = b^a}",e);   //multiple assignments
         cp3.parseProgram();
-        System.out.println("a = " + vars.get("a"));
-        System.out.println("b = " + vars.get("b"));
-        System.out.println("c = " + vars.get("c"));
+        assertEquals(vars.get("a"),4);
+        assertEquals(vars.get("b"),52);
+        assertEquals(vars.get("c"),7311616);
     }
 
     @Test
@@ -122,8 +128,16 @@ class DemoApplicationTests {
         CmdParser cp2 = new CmdParser(vars,"if (",e);                                   //if with () but it misses a statement and )
         parseWithErrors(cp2,"what's after (");
 
-        CmdParser cp3 = new CmdParser(vars,"if (tester",e);
-        parseWithErrors(cp3,"not closed :(");
+        CmdParser cp3 = new CmdParser(vars,"if (tester",e);                             //if w/o () fully closed
+        parseWithErrors(cp3,"not closed 🙁");
+
+        CmdParser cp4 = new CmdParser(vars,"if (tester)",e);
+
+        CmdParser cp5 = new CmdParser(vars,"if (tester) a = 20",e);
+        assertEquals(vars.get("a"),20);
+
+//        CmdParser cp6 = new CmdParser()
+
 
 
     }

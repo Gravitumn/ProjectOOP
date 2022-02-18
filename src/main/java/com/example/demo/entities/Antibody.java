@@ -25,6 +25,10 @@ public class Antibody extends Entities{
         return false;
     }
 
+    protected void turnVirus(String geneticCode){
+
+    }
+
     public static void setKillGain(int killGain) {
         Antibody.killGain = killGain;
     }

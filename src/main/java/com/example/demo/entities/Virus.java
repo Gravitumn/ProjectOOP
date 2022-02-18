@@ -30,7 +30,7 @@ public class Virus extends Entities {
 
             Entity target = Board.getEntity(targetX,targetY);
             if(target.attacked(this) && target instanceof Antibody){  //if virus killed target
-                turnVirus((Antibody) target);
+                ((Antibody) target).turnVirus(this.geneticCode);
             }
             return true;    //return true when attack hits
         }
@@ -39,11 +39,5 @@ public class Virus extends Entities {
 
     public void setLifeGain(int LifeGain){
         this.lifeGain = LifeGain;
-    }
-
-    private void turnVirus(Antibody a){
-        Board.delete(a);
-        new Virus(geneticCode,a.getLocation());
-        a = null;
     }
 }
