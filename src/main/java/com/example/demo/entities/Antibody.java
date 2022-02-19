@@ -7,8 +7,7 @@ import com.example.demo.utility.Pair;
 
 public class Antibody extends Entities{
 
-    private static int maxHp;
-    private static int atk;
+
     private static int killGain;
     private static int moveCost;
     private static int cost;
@@ -54,7 +53,7 @@ public class Antibody extends Entities{
 
 
     public int getAtk(){
-        return Antibody.atk;
+        return atk;
     }
 
 
@@ -64,7 +63,7 @@ public class Antibody extends Entities{
     }
 
     public void setAtk(int atk) {
-        Antibody.atk = atk;
+        this.atk = atk;
     }
 
     public static void setKillGain(int killGain) {

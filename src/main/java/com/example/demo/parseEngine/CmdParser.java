@@ -105,7 +105,7 @@ public class CmdParser{
     public void parseMove(boolean exist) throws SyntaxErrorException {
         tkz.consume("move");
         int direction = parseDirection();
-        if (exist && tired){
+        if (exist && !tired){
             current_unit.changeLocation(direction);
             tired=true;
         }
@@ -114,7 +114,7 @@ public class CmdParser{
     public void parseATK(boolean exist) throws SyntaxErrorException {
         tkz.consume("shoot");
         int direction = parseDirection();
-        if (exist && tired){
+        if (exist && !tired){
             current_unit.Attack(direction);
             tired=true;
         }

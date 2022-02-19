@@ -11,6 +11,8 @@ import java.util.Collections;
 public class Entities implements Entity {
 
     protected int hp;
+    protected int maxHp;
+    protected int atk;
     protected final Factory factory = Factory.instance();
     protected String geneticCode;
     protected Pair<Integer,Integer> location;

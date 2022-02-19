@@ -11,8 +11,6 @@ import java.util.Collections;
 
 public class Virus extends Entities {
 
-    private static int atk;
-    private static int maxHp;
     private int lifeGain;
 
     public Virus(String geneticCode,Pair<Integer,Integer> location){
@@ -68,6 +66,6 @@ public class Virus extends Entities {
     }
 
     public void setAtk(int atk) {
-        Virus.atk = atk;
+        this.atk = atk;
     }
 }
