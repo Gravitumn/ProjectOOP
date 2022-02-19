@@ -154,8 +154,10 @@ public class CmdParser{
             condition=false;
         tkz.consume("then");
         parseStatement(condition);
-        tkz.consume("else");
-        parseStatement(!condition);
+        if (tkz.peek().equals("else")) {                    //it will work only when "else" is present
+            tkz.consume("else");
+            parseStatement(!condition);
+        }
 
     }
 
@@ -164,6 +166,8 @@ public class CmdParser{
         tkz.consume("(");
         Expr ex = parseExpr();
         tkz.consume(")");
+        int count = 1;
+
         for(int i=0;i<1000 && ex.eval(vars)>0;i++){
             parseStatement(exist);
         }

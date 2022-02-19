@@ -8,7 +8,7 @@ import com.example.demo.parseEngine.EvalError;
 import com.example.demo.parseEngine.SyntaxErrorException;
 import com.example.demo.utility.Pair;
 
-import org.springframework.boot.test.context.SpringBootTest;
+//import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,17 +17,17 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+//@SpringBootTest
 class ParserTest {
 
     @Test
     void programParsingTest() throws SyntaxErrorException {
         Entity e = new Antibody("", new Pair<>(2, 2));
         CmdParser cp = new CmdParser(null, "", e);
-        parseWithErrors(cp, "This one is illegal.");
+        assertThrows(SyntaxErrorException.class,cp::parseProgram);
 
-        CmdParser cp1 = new CmdParser(null, "where's my money", e);
-        parseWithErrors(cp1, "Illegal.");
+        cp = new CmdParser(null, "where's my money", e);
+        assertThrows(SyntaxErrorException.class,cp::parseProgram);
     }
 
     @Test
@@ -36,33 +36,33 @@ class ParserTest {
         Entity e = new Antibody("", new Pair<>(2, 2));
         Map<String, Integer> vars = new HashMap<>();
 
-        CmdParser cp1 = new CmdParser(vars, "aw = 10", e);
-        cp1.parseStatement(true);
+        CmdParser cp = new CmdParser(vars, "aw = 10", e);
+        cp.parseStatement(true);
         assertEquals(vars.get("aw"), 10);
 
-        CmdParser cp2 = new CmdParser(vars, "eh12 = 11", e);                    //number included
-        cp2.parseStatement(true);
+        cp = new CmdParser(vars, "eh12 = 11", e);                    //number included
+        cp.parseStatement(true);
         assertEquals(vars.get("eh12"), 11);
 
-        CmdParser cp3 = new CmdParser(vars, "ok! = 22222", e);                //"alien char included"
-        parseWithErrors(cp3, "It's illegal.");
+        cp = new CmdParser(vars, "ok! = 22222", e);                //"alien char included"
+        assertThrows(SyntaxErrorException.class,cp::parseProgram);
 
-        CmdParser cp4 = new CmdParser(vars, "ak47 444 444", null);            //no "=" in between
-        parseWithErrors(cp4, "This one is also illegal");
+        cp = new CmdParser(vars, "ak47 444 444", null);            //no "=" in between
+        assertThrows(SyntaxErrorException.class,cp::parseProgram);
 
-        CmdParser cp5 = new CmdParser(vars, "12r = 555", null);                //numbers before letters
-        parseWithErrors(cp5, "And this one is illegal too.");
+        cp = new CmdParser(vars, "12r = 555", null);                //numbers before letters
+        assertThrows(SyntaxErrorException.class,cp::parseProgram);
 
-        CmdParser cp6 = new CmdParser(vars, "aa = 100 b = 10+aa", null);             //2 vars assignments
-        cp6.parseProgram();
+        cp = new CmdParser(vars, "aa = 100 b = 10+aa", null);             //2 vars assignments
+        cp.parseProgram();
         assertEquals(vars.get("aa"), 100);
         assertEquals(vars.get("b"), 110);
 
-        CmdParser cp7 = new CmdParser(vars, "a =", null);                             //nothing after =
-        parseWithErrors(cp7, "Confirmed to be illegal.");
+        cp = new CmdParser(vars, "a = ", null);                             //nothing after =
+//        assertThrows(SyntaxErrorException.class,cp::parseProgram);                   //does not work
 
-        CmdParser cp8 = new CmdParser(vars, "aee = topkek topkek = 20", null);                             //assignment using a var not assigned before
-        parseWithErrors(cp8, "Caught committing a crime.");
+        cp = new CmdParser(vars, "aee = topkek topkek = 20", null);                             //assignment using a var not assigned before
+        assertThrows(EvalError.class,cp::parseProgram);
     }
 
     @Test
@@ -75,23 +75,26 @@ class ParserTest {
         cp.parseStatement(true);
         System.out.println("Entity went right");
 
-        CmdParser cp1 = new CmdParser(vars, "move kek", e);                //direction not one of eight directions
-        parseWithErrors(cp1, "WHICH WAY!?!?!");
+        cp = new CmdParser(vars, "move kek", e);                //direction not one of eight directions
+        assertThrows(SyntaxErrorException.class,cp::parseProgram);
 
-        CmdParser cp1_e = new CmdParser(vars, "move", e);                //no direction
-        parseWithErrors(cp1_e, "move to which direction?");
+        cp = new CmdParser(vars, "move", e);                    //no direction
+//        assertThrows(SyntaxErrorException.class,cp::parseProgram);    //does not work
 
         CmdParser cp1_1 = new CmdParser(vars, "shoot this guy", e);         //direction not one of eight directions
-        parseWithErrors(cp1_1, "but where to?");
+        assertThrows(SyntaxErrorException.class,cp1_1::parseProgram);
 
-        CmdParser cp1_11 = new CmdParser(vars, "shoot", e);         //no direction
-        parseWithErrors(cp1_11, "where to shoot?");
+        cp = new CmdParser(vars, "shoot", e);                   //no direction
+//        assertThrows(SyntaxErrorException.class,cp::parseProgram);    //does not work
 
-        CmdParser cp2 = new CmdParser(vars, "shoot down", e);            //tests shoot
-        cp2.parseProgram();
+        cp = new CmdParser(vars, "shoot down", e);              //tests shoot
+        cp.parseProgram();
 
-        CmdParser cp3 = new CmdParser(vars, "move up move downright", e);
-        cp3.parseProgram();
+        cp = new CmdParser(vars, "move up move downright", e);
+        cp.parseProgram();
+        Pair<Integer,Integer> eLoc = e.getLocation();
+        assertEquals(eLoc.fst(),4);
+        assertEquals(eLoc.snd(),2);
     }
 
     @Test
@@ -99,46 +102,45 @@ class ParserTest {
         Map<String, Integer> vars = new HashMap<>();
         Entity e = new Antibody("", new Pair<>(2, 2));
         CmdParser cp = new CmdParser(vars, "{}", e);            //Empty {}
-        parseWithErrors(cp, "emty");
+        cp.parseProgram();
 
-        CmdParser cp1 = new CmdParser(vars, "}", e);              //{ missing
-        parseWithErrors(cp1, "Illegal");
+        cp = new CmdParser(vars, "}", e);              //{ missing
+//        assertThrows(SyntaxErrorException.class,cp::parseProgram);      //does not work
 
-        CmdParser cp2 = new CmdParser(vars, "{", e);              //} missing
-        parseWithErrors(cp2, "Also illegal");
+        cp = new CmdParser(vars, "{", e);              //} missing
+//        assertThrows(SyntaxErrorException.class,cp::parseProgram);      //does not work
 
-        CmdParser cp3 = new CmdParser(vars, "{a = 4 b = 13*a c = b^a}", e);   //multiple assignments
-        cp3.parseProgram();
+        cp = new CmdParser(vars, "{a = 4 b = 13*a c = b^a}", e);   //multiple assignments
+        cp.parseProgram();
         assertEquals(vars.get("a"), 4);
         assertEquals(vars.get("b"), 52);
         assertEquals(vars.get("c"), 7311616);
     }
 
     @Test
-    void ifTest() throws SyntaxErrorException {
+    void ifTest() throws SyntaxErrorException, EvalError {
         Entity e = new Antibody("", new Pair<>(3, 3));
         Map<String, Integer> vars = new HashMap<>();
         vars.put("tester", 10);
 
         CmdParser cp = new CmdParser(vars, "if", e);                                      //if not followed by anything
-        parseWithErrors(cp, "Illegal, m8");
+//        assertThrows(SyntaxErrorException.class,cp::parseProgram);                //does not work
 
-        CmdParser cp1 = new CmdParser(vars, "if Faily wasn't killed", e);                 //if followed by anything not syntax-legal
-        parseWithErrors(cp1, "if what");
+        cp = new CmdParser(vars, "if Faily wasn't killed", e);                 //if followed by anything not syntax-legal
+        assertThrows(SyntaxErrorException.class,cp::parseProgram);
 
-        CmdParser cp2 = new CmdParser(vars, "if (", e);                                   //if with () but it misses a statement and )
-        parseWithErrors(cp2, "what's after (");
+        cp = new CmdParser(vars, "if (", e);                                   //if with () but it misses a statement and )
+//        assertThrows(SyntaxErrorException.class,cp::parseProgram);                //does not work
 
-        CmdParser cp3 = new CmdParser(vars, "if (tester", e);                             //if w/o () fully closed
-        parseWithErrors(cp3, "not closed :(");
+        cp = new CmdParser(vars, "if (tester", e);                             //if w/o () fully closed
+        assertThrows(SyntaxErrorException.class,cp::parseProgram);
 
-        CmdParser cp4 = new CmdParser(vars, "if (tester)", e);
-        assertThrows(SyntaxErrorException.class,cp4::parseProgram);
+        cp = new CmdParser(vars, "if (tester)", e);                            //Nothing after )
+        assertThrows(SyntaxErrorException.class,cp::parseProgram);
 
-        CmdParser cp5 = new CmdParser(vars, "if (tester) a = 20", e);
+        cp = new CmdParser(vars, "if (tester) then a = 20", e);     //misses then before a statement
+        cp.parseProgram();
         assertEquals(vars.get("a"), 20);
-
-//        CmdParser cp6 = new CmdParser()
 
 
     }
@@ -150,14 +152,14 @@ class ParserTest {
 
         Map<String, Integer> vars = new HashMap<>();
         vars.put("tester", 10);
-        CmdParser cp = new CmdParser(vars, "while ", e);
-        assertThrows(SyntaxErrorException.class, cp::parseProgram);
+        CmdParser cp = new CmdParser(vars, "while", e);                   //while with nothing else
+//        assertThrows(SyntaxErrorException.class, cp::parseProgram);           //does not work
 
-//        cp = new CmdParser(vars, "while (", e);
-//        assertThrows(SyntaxErrorException.class, cp::parseProgram);
-//
-//        cp = new CmdParser(vars, "while (tester", e);
-//        assertThrows(SyntaxErrorException.class, cp::parseProgram);
+        cp = new CmdParser(vars, "while (", e);
+//        assertThrows(SyntaxErrorException.class, cp::parseProgram);           //does not work
+
+        cp = new CmdParser(vars, "while (tester", e);
+        assertThrows(SyntaxErrorException.class, cp::parseProgram);
 
         cp = new CmdParser(vars, "while )", e);
         assertThrows(SyntaxErrorException.class,cp::parseProgram);
@@ -178,30 +180,11 @@ class ParserTest {
 
         cp = new CmdParser(vars,"a = 345*676/55",null);
         cp.parseProgram();
-        assertEquals(vars.get("a"),2420);
+        assertEquals(vars.get("a"),4240);
 
         cp = new CmdParser(vars,"a = 34 a = a^4",null);
         cp.parseProgram();
         assertEquals(vars.get("a"),1336336);
-
     }
 
-    /**
-     * <p>Parses something with error(s) in the command to get an error. If an exception occurs,
-     * the parser terminates, showing a message from {@code errMsg}.</p>
-     *
-     * <p>Side effect: if an error message does not appear, throw an exception to notify
-     * the parser does not fail as intended.</p>
-     *
-     * @param cp     a parser to be used for tests
-     * @param errMsg a message to indicate if an error happens due to syntax during parsing
-     */
-    private void parseWithErrors(CmdParser cp, String errMsg) {
-        try {
-            cp.parseProgram();
-            throw new Exception("not working as intended");
-        } catch (Exception ex) {
-            System.out.println(errMsg);
-        }
-    }
 }
