@@ -7,6 +7,8 @@ import com.example.demo.utility.Pair;
 
 public class Antibody extends Entities{
 
+    private static int maxHp;
+    private static int atk;
     private static int killGain;
     private static int moveCost;
     private static int cost;
@@ -17,16 +19,52 @@ public class Antibody extends Entities{
 
     @Override
     public boolean Attack(int direction) throws SyntaxErrorException {
-        if(super.Attack(direction)){
-            this.hp += killGain;
-            if(hp > maxHp)hp = maxHp;
+        int distance = nearbyEntity(direction);
+        int type = distance % 10;
+        distance = distance / 10;
+        int startX = this.location.fst();
+        int startY = this.location.snd();
+        if(distance!=0) {
+            int xIncrement = factory.newIncrement(direction).xIncrement();
+            int yIncrement = factory.newIncrement(direction).yIncrement();
+            int targetX = startX + (distance * xIncrement);
+            int targetY = startY + (distance * yIncrement);
+
+            if(type == 1) {
+                Virus target = (Virus) Board.getEntity(targetX, targetY);
+                if(target.attacked(this)){
+                    this.hp += killGain;
+                    if(hp > maxHp) hp = maxHp;
+                }
+            }
+            else{
+                Antibody target = (Antibody) Board.getEntity(targetX,targetY);
+                target.attacked(this);
+            }
             return true;
         }
-        return false;
+        return false;   //return false when no target found.
     }
 
     protected void turnVirus(String geneticCode){
 
+    }
+
+
+
+
+    public int getAtk(){
+        return Antibody.atk;
+    }
+
+
+    public void setHP(int hp) {
+        maxHp = hp;
+        this.hp = hp;
+    }
+
+    public void setAtk(int atk) {
+        Antibody.atk = atk;
     }
 
     public static void setKillGain(int killGain) {

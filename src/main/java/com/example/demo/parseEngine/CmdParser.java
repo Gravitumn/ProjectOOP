@@ -65,8 +65,6 @@ public class CmdParser{
         String next = tkz.peek();
         switch (next){
             case "shoot":
-                parseATK(exist);
-                break;
             case "move" :
                 parseActionCmd(exist);
                 break;

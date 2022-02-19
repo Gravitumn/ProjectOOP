@@ -59,25 +59,8 @@ public interface Entity {
      * @Side-effect Decrease this entity's health. this entity will be deleted if hp reaches 0.
      * @return true if this entity's hp reach 0, otherwise, false.
      */
-    boolean attacked(Entity attacker);
+    boolean attacked(Virus attacker);
 
-    /**
-     *
-     * @return atk of this entity.
-     */
-    int getAtk();
-
-    /**
-     * @param atk an Integer which describe atk of this entity.
-     * @Side-effect change this entity's atk.
-     */
-    void setAtk(int atk);
-
-    /**
-     *
-     * @param hp an Integer which describe hp of this entity.
-     * @Side-effect change this entity's hp.
-     */
-    void setHP(int hp);
+    boolean attacked(Antibody attacker);
 
 }

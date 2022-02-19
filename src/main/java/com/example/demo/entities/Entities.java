@@ -10,9 +10,7 @@ import java.util.Collections;
 
 public class Entities implements Entity {
 
-    protected static int atk;
     protected int hp;
-    protected static int maxHp;
     protected final Factory factory = Factory.instance();
     protected String geneticCode;
     protected Pair<Integer,Integer> location;
@@ -42,19 +40,7 @@ public class Entities implements Entity {
 
     @Override
     public boolean Attack(int direction) throws SyntaxErrorException {
-        int distance = nearbyEntity(direction);
-        int startX = this.location.fst();
-        int startY = this.location.snd();
-        if(distance!=0) {
-            int xIncrement = factory.newIncrement(direction).xIncrement();
-            int yIncrement = factory.newIncrement(direction).yIncrement();
-            int targetX = startX + (distance * xIncrement);
-            int targetY = startY + (distance * yIncrement);
-
-            Entity target = Board.getEntity(targetX,targetY);
-            return target.attacked(this);
-        }
-        return false;   //return false when no target found.
+        return false;
     }
 
     @Override
@@ -138,7 +124,13 @@ public class Entities implements Entity {
     }
 
     @Override
-    public boolean attacked(Entity attacker) {
+    public boolean attacked(Virus attacker){
+        this.hp -= attacker.getAtk();
+        return this.hp <= 0;    //return true when hp reach 0.
+    }
+
+    @Override
+    public boolean attacked(Antibody attacker){
         this.hp -= attacker.getAtk();
         return this.hp <= 0;    //return true when hp reach 0.
     }
@@ -153,24 +145,5 @@ public class Entities implements Entity {
     @Override
     public Pair<Integer, Integer> getLocation() {
         return this.location;
-    }
-
-
-
-    @Override
-    public int getAtk(){
-        return atk;
-    }
-
-
-    @Override
-    public void setHP(int hp) {
-        maxHp = hp;
-        this.hp = hp;
-    }
-
-    @Override
-    public void setAtk(int atk) {
-        Entities.atk = atk;
     }
 }
