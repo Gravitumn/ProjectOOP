@@ -130,7 +130,7 @@ class ParserTest {
     }
 
     @Test
-    void ifTest() throws SyntaxErrorException, EvalError {
+    void    ifTest() throws SyntaxErrorException, EvalError {
         Entity e = new Antibody("", new Pair<>(3, 3));
         Map<String, Integer> vars = new HashMap<>();
         vars.put("tester", 10);
@@ -142,7 +142,7 @@ class ParserTest {
         assertThrows(SyntaxErrorException.class,cp::parseProgram);
 
         cp = new CmdParser(vars, "if (", e);                                   //if with () but it misses a statement and )
-//        assertThrows(SyntaxErrorException.class,cp::parseProgram);                //does not work - parser did nothing
+        assertThrows(SyntaxErrorException.class,cp::parseProgram);                //does not work - parser did nothing
 
         cp = new CmdParser(vars, "if (tester", e);                             //if w/o () fully closed
         assertThrows(SyntaxErrorException.class,cp::parseProgram);
@@ -150,9 +150,12 @@ class ParserTest {
         cp = new CmdParser(vars, "if (tester)", e);                            //Nothing after )
         assertThrows(SyntaxErrorException.class,cp::parseProgram);
 
-        cp = new CmdParser(vars, "if (tester) then a = 20", e);                 //misses then before a statement
+        cp = new CmdParser(vars, "if (tester) then a = 20 else {}", e);                 //misses then before a statement
         cp.parseProgram();
         assertEquals(vars.get("a"), 20);
+
+        cp = new CmdParser(vars, "if (tester) then a = 20 else  ", e);                 //There is no statement after else
+        assertThrows(SyntaxErrorException.class,cp::parseProgram);
     }
 
     @Test

@@ -46,22 +46,23 @@ public class CmdTokenizer implements Tokenizer{
                 for (pos++; pos < cmd.length() &&
                         Character.isDigit(cmd.charAt(pos)); pos++)
                     s.append(cmd.charAt(pos));
+
             } else if (Character.isLetter(c)) {  // start of string
                 s.append(c);
                 for (pos++; pos < cmd.length() &&
                         (Character.isLetter(cmd.charAt(pos)) ||
                         Character.isDigit(cmd.charAt(pos))); pos++) {
                     s.append(cmd.charAt(pos));
-//                    if (pos >= cmd.length() - 1) {
-//                        pos++;
-//                        break;}
                 }
+
             } else if (c == '+' || c == '-' || c == '*' || c == '/'
                     || c == '%' || c == '(' || c == ')' || c == '^'
                     || c == '=' || c == '{' || c == '}') {
                 s.append(c);
                 pos++;
-            } else {
+            }
+
+            else {
                 throw new SyntaxErrorException("unknown character: " + c);
             }
             next = s.toString();
@@ -70,6 +71,11 @@ public class CmdTokenizer implements Tokenizer{
 
     //verifies if it reaches the end
     public boolean atEndOfSauce(){
-        return pos >= cmd.length();
+    int tempPos=pos;
+    if(tempPos>=0){
+        while (tempPos < cmd.length() &&Character.isWhitespace(cmd.charAt(tempPos)))
+            tempPos++;
+    }
+    return tempPos >= cmd.length();
     }
 }

@@ -42,6 +42,8 @@ public class CmdParser{
     public void parseStatement(boolean exist) throws SyntaxErrorException, EvalError {
         String next = tkz.peek();
         switch (next){
+            case  "":
+                blame("There is no Statement");
             case "{" :
                 parseBlock(exist);
                 break;
@@ -154,10 +156,8 @@ public class CmdParser{
             condition=false;
         tkz.consume("then");
         parseStatement(condition);
-        if (tkz.peek().equals("else")) {                    //it will work only when "else" is present
-            tkz.consume("else");
-            parseStatement(!condition);
-        }
+        tkz.consume("else");
+        parseStatement(!condition);
 
     }
 
@@ -239,6 +239,9 @@ public class CmdParser{
 
 
     public Expr parsePower() throws SyntaxErrorException{
+        if(tkz.peek("")){
+            blame("There are no expression");
+        }
         if (isNumber(tkz.peek())) {
             return factory.newIntlit(Integer.parseInt(tkz.consume()));
         }
