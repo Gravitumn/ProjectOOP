@@ -127,6 +127,7 @@ class ParserTest {
 
         cp = new CmdParser(vars, "{wait here",e);                  //not ending with }
         assertThrows(SyntaxErrorException.class,cp::parseProgram);
+
     }
 
     @Test

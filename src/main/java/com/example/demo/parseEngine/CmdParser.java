@@ -16,6 +16,7 @@ public class CmdParser{
     Factory factory;
     private final Entity current_unit;
     private Random rng;
+    public boolean tired;
 
     private final ArrayList<String> reservedWord = new ArrayList<>(
             Arrays.asList("antibody","down","downleft","downright","else","if","left","move","nearby","right","shoot",
@@ -28,6 +29,7 @@ public class CmdParser{
         this.vars = vars;
         factory = Factory.instance();
         rng = new Random();
+        tired=false;
     }
 
     public void parseProgram() throws SyntaxErrorException, EvalError {
@@ -105,16 +107,18 @@ public class CmdParser{
     public void parseMove(boolean exist) throws SyntaxErrorException {
         tkz.consume("move");
         int direction = parseDirection();
-        if (exist){
+        if (exist && tired){
             current_unit.changeLocation(direction);
+            tired=true;
         }
     }
 
     public void parseATK(boolean exist) throws SyntaxErrorException {
         tkz.consume("shoot");
         int direction = parseDirection();
-        if (exist){
+        if (exist && tired){
             current_unit.Attack(direction);
+            tired=true;
         }
     }
 
