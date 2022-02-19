@@ -59,7 +59,7 @@ class ParserTest {
         assertEquals(vars.get("b"), 110);
 
         cp = new CmdParser(vars, "a = ", null);                             //nothing after =
-//        assertThrows(SyntaxErrorException.class,cp::parseProgram);                   //does not work
+        assertThrows(SyntaxErrorException.class,cp::parseProgram);                   //does not work -> now operational
 
         cp = new CmdParser(vars, "aee = topkek topkek = 20", null);                             //assignment using a var not assigned before
         assertThrows(EvalError.class,cp::parseProgram);
@@ -79,7 +79,7 @@ class ParserTest {
         assertThrows(SyntaxErrorException.class,cp::parseProgram);
 
         cp = new CmdParser(vars, "move", e);                    //no direction
-//        assertThrows(SyntaxErrorException.class,cp::parseProgram);    //does not work
+//        assertThrows(SyntaxErrorException.class,cp::parseProgram);    //does not work - parser did nothing
 
         CmdParser cp1_1 = new CmdParser(vars, "shoot this guy", e);         //direction not one of eight directions
         assertThrows(SyntaxErrorException.class,cp1_1::parseProgram);
@@ -114,13 +114,13 @@ class ParserTest {
 
         cp = new CmdParser(vars, "{a = 4 b = 13*a c = b^a}", e);   //multiple statements
         cp.parseProgram();
-        assertEquals(vars.get("a"), 4);
-        assertEquals(vars.get("b"), 52);
-        assertEquals(vars.get("c"), 7311616);
+        assertEquals(4,vars.get("a"));
+        assertEquals(52, vars.get("b"));
+        assertEquals(7311616, vars.get("c"));
 
         cp = new CmdParser(vars, "{kek = 33333}",e);               //single statement
         cp.parseProgram();
-        assertEquals(vars.get("kek"),33333);
+        assertEquals(33333,vars.get("kek"));
 
         cp = new CmdParser(vars, "sweet}", e);                     //not starting with {
         assertThrows(SyntaxErrorException.class,cp::parseProgram);
@@ -144,6 +144,9 @@ class ParserTest {
         cp = new CmdParser(vars, "if (", e);                                   //if with () but it misses a statement and )
         assertThrows(SyntaxErrorException.class,cp::parseProgram);                //does not work - parser did nothing
 
+        cp = new CmdParser(vars, "if )",e);
+        assertThrows(SyntaxErrorException.class,cp::parseProgram);
+
         cp = new CmdParser(vars, "if (tester", e);                             //if w/o () fully closed
         assertThrows(SyntaxErrorException.class,cp::parseProgram);
 
@@ -152,7 +155,7 @@ class ParserTest {
 
         cp = new CmdParser(vars, "if (tester) then a = 20 else {}", e);                 //misses then before a statement
         cp.parseProgram();
-        assertEquals(vars.get("a"), 20);
+        assertEquals(20,vars.get("a"));
 
         cp = new CmdParser(vars, "if (tester) then a = 20 else  ", e);                 //There is no statement after else
         assertThrows(SyntaxErrorException.class,cp::parseProgram);
@@ -169,13 +172,19 @@ class ParserTest {
 //        assertThrows(SyntaxErrorException.class, cp::parseProgram);           //does not work - parser did nothing
 
         cp = new CmdParser(vars, "while (", e);
-//        assertThrows(SyntaxErrorException.class, cp::parseProgram);           //does not work - got NumberFormatException
+        assertThrows(SyntaxErrorException.class, cp::parseProgram);           //does not work - got NumberFormatException instead -> now fixed
 
         cp = new CmdParser(vars, "while (tester", e);
         assertThrows(SyntaxErrorException.class, cp::parseProgram);
 
         cp = new CmdParser(vars, "while )", e);
         assertThrows(SyntaxErrorException.class,cp::parseProgram);
+
+        String cmd = "a = 5 counter = 4 while (counter) {a = a + a counter = counter - 1}";
+        cp = new CmdParser(vars,cmd,e);
+        assertDoesNotThrow(cp::parseProgram);
+        assertEquals(80,vars.get("a"));
+        assertEquals(0,vars.get("counter"));
 
     }
 

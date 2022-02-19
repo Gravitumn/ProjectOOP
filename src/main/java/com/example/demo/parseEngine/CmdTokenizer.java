@@ -69,6 +69,21 @@ public class CmdTokenizer implements Tokenizer{
 
     }
 
+
+    //for while loop
+    public char charAt(int index){
+        return cmd.charAt(index);
+    }
+
+    public int currentPos(){
+        return pos;
+    }
+
+    public void goTo(int desiredPos) throws SyntaxErrorException {
+        pos = desiredPos;
+        getNext();
+    }
+
     //verifies if it reaches the end
     public boolean atEndOfSauce(){
     int tempPos=pos;

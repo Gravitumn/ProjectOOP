@@ -165,11 +165,16 @@ public class CmdParser{
         tkz.consume("while");
         tkz.consume("(");
         Expr ex = parseExpr();
+        int returnPos = tkz.currentPos();
+        if(tkz.atEndOfSauce()) blame();
+        while(tkz.charAt(returnPos)==32) {
+            returnPos++;
+        }
         tkz.consume(")");
-        int count = 1;
 
         for(int i=0;i<1000 && ex.eval(vars)>0;i++){
             parseStatement(exist);
+            if(ex.eval(vars)>0) tkz.goTo(returnPos);
         }
 
     }
