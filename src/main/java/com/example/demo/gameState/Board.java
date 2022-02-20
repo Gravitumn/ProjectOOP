@@ -29,7 +29,7 @@ public class Board{
            e = grid[y][x];
            return e;
         }catch (ArrayIndexOutOfBoundsException | NullPointerException err){
-            throw new RuntimeException("Cannot locate entity outside grid range.");
+            return null;
         }
     }
 
@@ -92,6 +92,7 @@ public class Board{
     public static boolean move(Entity e,Pair<Integer,Integer> newLocation){
         if(isAvailable(newLocation))
         {
+            grid[e.getLocation().snd()][e.getLocation().fst()] = null;
             grid[newLocation.snd()][newLocation.fst()] = e;
             return true;
         }

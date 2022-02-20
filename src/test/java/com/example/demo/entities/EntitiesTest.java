@@ -282,4 +282,39 @@ class EntitiesTest {
         Antibody a1 = new Antibody("{}",factory.newPair(2,2));
         assertEquals(23,v.nearbyAntibody());
     }
+
+    @Test
+    void forcemove(){
+        Board board = new Board(10,10);
+        Antibody a1 = new Antibody("{}",factory.newPair(2,0));
+        Antibody a2 = new Antibody("{}",factory.newPair(4,0));
+        a1.setHP(100);a1.setMoveCost(30);
+        a2.setHP(30);a2.setMoveCost(30);
+
+        //try forceMove to unavailable grid. a1 should remain the same location.
+        a1.forceMove(factory.newPair(4,0));
+        assertEquals(Board.getEntity(2,0),a1);
+        assertEquals(100,a1.hp);    //hp remain the same.
+
+        //try forceMove a1 to available grid.
+        a1.forceMove(factory.newPair(0,0));
+        assertEquals(Board.getEntity(0,0),a1);  //a1 location change to (0,0)
+        assertNotEquals(Board.getEntity(2,0),a1);
+        assertEquals(70,a1.hp); //a1's hp decreased for move cost.
+
+        //try forceMove a2, which has hp equals to move cost.
+        a2.forceMove(factory.newPair(1,0));
+        assertEquals(30,a2.hp);
+        assertEquals(Board.getEntity(4,0),a2);
+        assertNotEquals(Board.getEntity(1,0),a2);
+
+        //try forceMove a1 to out of grid location.
+        a1.forceMove(factory.newPair(-1,0));    //lower bound
+        assertEquals(Board.getEntity(0,0),a1);
+        assertEquals(70,a1.hp);
+
+        a1.forceMove(factory.newPair(10,0));
+        assertEquals(Board.getEntity(0,0),a1);
+        assertEquals(70,a1.hp);
+    }
 }

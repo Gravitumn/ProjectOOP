@@ -58,9 +58,6 @@ public class Antibody extends Entities{
         return false;
     }
 
-
-
-
     public int getAtk(){
         return atk;
     }
