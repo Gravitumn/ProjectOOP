@@ -221,9 +221,65 @@ class EntitiesTest {
     }
 
     @Test
+    void VirusAfar() throws SyntaxErrorException {
+        Virus v = new Virus("{}",factory.newPair(0,0));
+        Virus v1 = new Virus("{}",factory.newPair(4,4));
+        assertEquals(48,v1.nearbyVirus());
+    }
+
+    @Test
+    void NoVirus() throws SyntaxErrorException {
+        Antibody a = new Antibody("{}",factory.newPair(1,2));
+        Antibody a1 = new Antibody("{}", factory.newPair(2,1));
+        assertEquals(0,a.nearbyVirus());
+        assertEquals(0,a1.nearbyVirus());
+    }
+
+    @Test
+    void VirusNotInPath() throws SyntaxErrorException {
+        Virus v = new Virus("{}",factory.newPair(1,3));
+        Virus v1 = new Virus("{}",factory.newPair(3,3));
+        Antibody a = new Antibody("{}",factory.newPair(2,1));
+        assertEquals(0,a.nearbyVirus());
+    }
+
+    @Test
+    void NearestVirus() throws SyntaxErrorException {
+        Virus v = new Virus("{}",factory.newPair(2,0));
+        Virus v1 = new Virus("{}",factory.newPair(3,0));
+        Virus v2 = new Virus("{}",factory.newPair(4,0));
+        Antibody a = new Antibody("{}",factory.newPair(3,1));
+        assertEquals(11,a.nearbyVirus());
+    }
+
+    @Test
     void nearbyAntibody() throws SyntaxErrorException {
         Antibody a = new Antibody("{}",factory.newPair(2,1));
         Antibody a1 = new Antibody("{}",factory.newPair(4,3));
         assertEquals(24,a.nearbyAntibody());
+    }
+
+    @Test
+    void NoAntibody() throws SyntaxErrorException {
+        Antibody a = new Antibody("{}",factory.newPair(2,0));
+        Virus v = new Virus("{}",factory.newPair(1,0));
+        assertEquals(0,a.nearbyAntibody());
+        assertEquals(13,v.nearbyAntibody());
+    }
+
+    @Test
+    void AntibodyNotInPath() throws SyntaxErrorException {
+        Virus v = new Virus("{}",factory.newPair(1,1));
+        Antibody a = new Antibody("{}",factory.newPair(0,3));
+        Antibody a1 = new Antibody("{}",factory.newPair(2,4));
+        assertEquals(0,v.nearbyAntibody());
+    }
+
+    @Test
+    void NearestAntibody() throws SyntaxErrorException {
+        Virus v = new Virus("{}",factory.newPair(0,0));
+        Antibody a = new Antibody("{}",factory.newPair(2,0));
+        Antibody a1 = new Antibody("{}",factory.newPair(2,2));
+        assertEquals(23,v.nearbyAntibody());
     }
 }
