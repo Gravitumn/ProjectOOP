@@ -34,19 +34,18 @@ public class Antibody extends Entities{
                 if(target.attacked(this)){
                     this.hp += killGain;
                     if(hp > maxHp) hp = maxHp;
+                    Board.delete(target);
                 }
             }
             else{
                 Antibody target = (Antibody) Board.getEntity(targetX,targetY);
-                target.attacked(this);
+                if(target.attacked(this)){
+                    Board.delete(target);
+                }
             }
             return true;
         }
         return false;   //return false when no target found.
-    }
-
-    protected void turnVirus(String geneticCode){
-
     }
 
 

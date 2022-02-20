@@ -110,5 +110,14 @@ public class Board{
     }
 
     public static void delete(Entity e){
+        Pair<Integer,Integer> loc = e.getLocation();
+        grid[loc.snd()][loc.fst()] = null;
+        queue.remove(e);
+    }
+
+    public static void turnVirus(Entity e,String geneticCode){
+        Pair<Integer,Integer> loc = e.getLocation();
+        Board.delete(e);
+        Virus v = new Virus(geneticCode,loc);
     }
 }

@@ -33,12 +33,14 @@ public class Virus extends Entities {
 
             if(type == 1) {
                 Virus target = (Virus) Board.getEntity(targetX, targetY);
-                target.attacked(this);
+                if(target.attacked(this)){
+                    target.killed();
+                }
             }
             else{
                 Antibody target = (Antibody) Board.getEntity(targetX,targetY);
                 if (target.attacked(this)) {  //if virus killed target
-                    target.turnVirus(this.geneticCode);
+                    Board.turnVirus(target,this.geneticCode);
                 }
             }
             return true;    //return true when attack hits
@@ -67,5 +69,9 @@ public class Virus extends Entities {
 
     public void setAtk(int atk) {
         this.atk = atk;
+    }
+
+    public void killed(){
+        Board.delete(this);
     }
 }
