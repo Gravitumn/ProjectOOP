@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.entities.Antibody;
+import com.example.demo.entities.Entities;
 import com.example.demo.entities.Entity;
 import com.example.demo.entities.Virus;
 import com.example.demo.gameState.Board;
@@ -13,6 +14,7 @@ import com.example.demo.utility.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
@@ -95,7 +97,7 @@ class ParserTest {
         cp.parseProgram();
         Pair<Integer, Integer> eLoc = e.getLocation();
         assertEquals(3, eLoc.fst());
-        assertEquals(3, eLoc.snd());
+        assertEquals(1, eLoc.snd());
     }
 
     @Test
@@ -217,29 +219,53 @@ class ParserTest {
         Entity v = new Virus("antibody left virus upright",new Pair<>(4,2));
         Entity alsoV = new Virus("",new Pair<>(8,6));
         Entity atb = new Antibody("",new Pair<>(2,2));
-        Entity alsoAtb = new Antibody("", new Pair(2,5));
+        Entity alsoAtb = new Antibody("", new Pair<>(2,5));
+        Entity dummy = new Entities("",new Pair<>(9,0));
 
         Map<String,Integer> vars = new HashMap<>();
 
-        CmdParser cpErrTest = new CmdParser(vars,"virus a=10",atb);
+        CmdParser cpErrTest = new CmdParser(vars,"virus a=10",atb);         //virus alone with one assignment after
         assertThrows(SyntaxErrorException.class,cpErrTest::parseProgram);
         cpErrTest = new CmdParser(vars,"virus here",atb);
         assertThrows(SyntaxErrorException.class,cpErrTest::parseProgram);
-        cpErrTest = new CmdParser(vars,"antibody here",atb);
+        cpErrTest = new CmdParser(vars,"antibody here",atb);                //same case, but as antibody
         assertThrows(SyntaxErrorException.class,cpErrTest::parseProgram);
         cpErrTest = new CmdParser(vars,"antibody b=20",atb);
         assertThrows(SyntaxErrorException.class,cpErrTest::parseProgram);
 
-        cpErrTest = new CmdParser(vars,"a = virus",atb);
+        cpErrTest = new CmdParser(vars,"a = virus",atb);                    //tests parseSensor, virus command
         assertDoesNotThrow(cpErrTest::parseProgram);
         System.out.println("a = " + vars.get("a"));
+        assertEquals(23,vars.get("a"));
+
+        cpErrTest = new CmdParser(vars,"pew = virus",dummy);                //tests parseSensor without any entity nearby
+        assertDoesNotThrow(cpErrTest::parseProgram);
+        System.out.println("pew = " + vars.get("pew"));
+        assertEquals(0,vars.get("pew"));
+        cpErrTest = new CmdParser(vars,"ok = antibody",dummy);              //same test, but changed to antibody
+        assertDoesNotThrow(cpErrTest::parseProgram);
+        System.out.println("ok = " + vars.get("ok"));
+        assertEquals(0,vars.get("ok"));
 
 
-        CmdParser[] cp = new CmdParser[4];
-        cp[0] = new CmdParser(vars,"nearby left nearby upright",v);
-        cp[1] = new CmdParser(vars,"antibody",alsoV);
-        cp[2] = new CmdParser(vars,"virus",atb);
-        cp[3] = new CmdParser(vars,"",alsoAtb);
+        HashMap<String,Integer>[] varsArr = new HashMap[4];
+        for (int i=0;i<varsArr.length;i++){
+            varsArr[i] = new HashMap<>();
+        }
+        CmdParser[] cp = new CmdParser[4];                                          //WIP
+        cp[0] = new CmdParser(varsArr[0],"l = nearby left r = nearby upright",v);
+        cp[1] = new CmdParser(varsArr[1],"a = antibody",alsoV);
+        cp[2] = new CmdParser(varsArr[2],"v = virus",atb);
+        cp[3] = new CmdParser(varsArr[3],"d = nearby down - nearby left",alsoAtb);
+        for (CmdParser cmdParser : cp) {
+            assertDoesNotThrow(cmdParser::parseProgram);
+        }
+        for (HashMap<String,Integer> varsInArr: varsArr){
+            Set<String> ks = varsInArr.keySet();
+            for(String key:ks){
+                System.out.println(key + " = " + varsInArr.get(key));
+            }
+        }
 
 
     }
