@@ -74,23 +74,23 @@ public class Entities implements Entity {
     @Override
     public int nearbyVirus() throws SyntaxErrorException {
         ArrayList<Integer> distance = new ArrayList<>();
-        int startX = this.location.fst();
-        int startY = this.location.snd();
         Pair<Integer,Integer> boardSize = Board.size();
 
         for(int i=1;i<=8;i++){
+            int startX = this.location.fst();
+            int startY = this.location.snd();
             int xIncrement = factory.newIncrement(i).xIncrement();
             int yIncrement = factory.newIncrement(i).yIncrement();
+            startX += xIncrement;
+            startY += yIncrement;
             while(!Board.IsVirus(startX,startY)){
-                startX += xIncrement;
-                startY += yIncrement;
                 startX+=xIncrement;
                 startY+=yIncrement;
                 if(startX > boardSize.fst() || startY > boardSize.snd() || startX < 0 || startY < 0){
                     break;
                 }
             }
-            distance.add(10*Board.findDistance(this.location, factory.newPair(startX,startY))+1);
+            distance.add(10*Board.findDistance(this.location, factory.newPair(startX,startY))+i);
         }
         if(distance.isEmpty())
             return 0;
@@ -101,23 +101,23 @@ public class Entities implements Entity {
     @Override
     public int nearbyAntibody() throws SyntaxErrorException {
         ArrayList<Integer> distance = new ArrayList<>();
-        int startX = this.location.fst();
-        int startY = this.location.snd();
         Pair<Integer,Integer> boardSize = Board.size();
 
         for(int i=1;i<=8;i++){
+            int startX = this.location.fst();
+            int startY = this.location.snd();
             int xIncrement = factory.newIncrement(i).xIncrement();
             int yIncrement = factory.newIncrement(i).yIncrement();
+            startX += xIncrement;
+            startY += yIncrement;
             while(!Board.IsAntibody(startX,startY)){
-                startX += xIncrement;
-                startY += yIncrement;
                 startX+=xIncrement;
                 startY+=yIncrement;
                 if(startX > boardSize.fst() || startY > boardSize.snd() || startX < 0 || startY < 0){
                     break;
                 }
             }
-            distance.add(10*Board.findDistance(this.location, factory.newPair(startX,startY))+2);
+            distance.add(10*Board.findDistance(this.location, factory.newPair(startX,startY))+i);
         }
         if(distance.isEmpty())
             return 0;
