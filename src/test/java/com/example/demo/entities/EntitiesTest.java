@@ -214,10 +214,16 @@ class EntitiesTest {
     }
 
     @Test
-    void nearbyVirus() {
+    void nearbyVirus() throws SyntaxErrorException {
+        Virus v = new Virus("{}",factory.newPair(1,3));
+        Antibody a = new Antibody("{}",factory.newPair(3,1));
+        assertEquals(26,a.nearbyVirus());
     }
 
     @Test
-    void nearbyAntibody() {
+    void nearbyAntibody() throws SyntaxErrorException {
+        Antibody a = new Antibody("{}",factory.newPair(2,1));
+        Antibody a1 = new Antibody("{}",factory.newPair(4,3));
+        assertEquals(24,a.nearbyAntibody());
     }
 }
