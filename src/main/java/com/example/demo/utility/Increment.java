@@ -29,9 +29,9 @@ public class Increment {
 
     public int yIncrement() throws SyntaxErrorException {
         switch (ans) {
-            case 1: case 2: case 8: return -1;
+            case 1: case 2: case 8: return 1;
             case 3: case 7: return 0;
-            case 6: case 5: case 4: return 1;
+            case 6: case 5: case 4: return -1;
             default: throw new SyntaxErrorException("direction should be integer between 1-8.");
         }
     }
