@@ -25,7 +25,6 @@ public class Virus extends Entities {
         int startX = this.location.fst();
         int startY = this.location.snd();
         if(distance!=0) {
-            lifeSteal();
             int xIncrement = factory.newIncrement(direction).xIncrement();
             int yIncrement = factory.newIncrement(direction).yIncrement();
             int targetX = startX + (distance * xIncrement);
@@ -38,6 +37,7 @@ public class Virus extends Entities {
                 }
             }
             else{
+                lifeSteal();
                 Antibody target = (Antibody) Board.getEntity(targetX,targetY);
                 if (target.attacked(this)) {  //if virus killed target
                     Board.turnVirus(target,this.geneticCode);

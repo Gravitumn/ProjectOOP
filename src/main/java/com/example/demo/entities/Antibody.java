@@ -8,9 +8,9 @@ import com.example.demo.utility.Pair;
 public class Antibody extends Entities{
 
 
-    private static int killGain;
-    private static int moveCost;
-    private static int cost;
+    private int killGain;
+    private int moveCost;
+    private int cost;
 
     public Antibody(String geneticCode,Pair<Integer,Integer> location){
         super(geneticCode, location);
@@ -48,6 +48,16 @@ public class Antibody extends Entities{
         return false;   //return false when no target found.
     }
 
+    public boolean forceMove(Pair<Integer,Integer> newlocation){
+        if(this.hp - this.moveCost > 0){
+            if(Board.move(this,newlocation)){
+                this.hp -= moveCost;
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 
 
@@ -65,23 +75,23 @@ public class Antibody extends Entities{
         this.atk = atk;
     }
 
-    public static void setKillGain(int killGain) {
-        Antibody.killGain = killGain;
+    public void setKillGain(int killGain) {
+        this.killGain = killGain;
     }
 
-    public static void setCost(int cost) {
-        Antibody.cost = cost;
+    public void setCost(int cost) {
+        this.cost = cost;
     }
 
-    public static void setMoveCost(int moveCost) {
-        Antibody.moveCost = moveCost;
+    public void setMoveCost(int moveCost) {
+        this.moveCost = moveCost;
     }
 
-    public static int getCost() {
+    public int getCost() {
         return cost;
     }
 
-    public static int getMoveCost() {
+    public int getMoveCost() {
         return moveCost;
     }
 }
