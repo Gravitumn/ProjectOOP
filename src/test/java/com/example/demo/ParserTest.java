@@ -25,7 +25,8 @@ class ParserTest {
 
     @Test
     void programParsingTest() throws SyntaxErrorException {
-        Entity e = new Antibody("", new Pair<>(2, 2));
+        Board board = new Board(10,10);
+        Entity e = new Antibody("", new Pair<>(2, 2),board);
         CmdParser cp = new CmdParser(null, "", e);
         assertThrows(SyntaxErrorException.class, cp::parseProgram);
 
@@ -36,7 +37,8 @@ class ParserTest {
     @Test
     void assignmentStatementTests() throws SyntaxErrorException, EvalError {
         //checks assignmentStatement
-        Entity e = new Antibody("", new Pair<>(2, 2));
+        Board board = new Board(10,10);
+        Entity e = new Antibody("", new Pair<>(2, 2),board);
         Map<String, Integer> vars = new HashMap<>();
 
         CmdParser cp = new CmdParser(vars, "aw = 10", e);
@@ -72,8 +74,8 @@ class ParserTest {
     void actionTests() throws SyntaxErrorException, EvalError {
 
         Map<String, Integer> vars = new HashMap<>();
-        new Board(10, 10);                                    //initialize the board
-        Entity e = new Antibody("", new Pair<>(2, 2));
+        Board board = new Board(10,10);                                    //initialize the board
+        Entity e = new Antibody("", new Pair<>(2, 2),board);
         CmdParser cp = new CmdParser(vars, "move right", e);
         cp.parseStatement(true);
         System.out.println("Entity went right");
@@ -103,7 +105,8 @@ class ParserTest {
     @Test
     void blockTest() throws SyntaxErrorException, EvalError {
         Map<String, Integer> vars = new HashMap<>();
-        Entity e = new Antibody("", new Pair<>(2, 2));
+        Board board = new Board(10,10);
+        Entity e = new Antibody("", new Pair<>(2, 2),board);
         new Board(10, 10);
 
         CmdParser cp = new CmdParser(vars, "{}", e);            //Empty {}
@@ -135,7 +138,8 @@ class ParserTest {
 
     @Test
     void ifTest() throws SyntaxErrorException, EvalError {
-        Entity e = new Antibody("", new Pair<>(3, 3));
+        Board board = new Board(10,10);
+        Entity e = new Antibody("", new Pair<>(3, 3),board);
         Map<String, Integer> vars = new HashMap<>();
         vars.put("tester", 10);
 
@@ -167,8 +171,8 @@ class ParserTest {
 
     @Test
     void whileTest() throws SyntaxErrorException {
-        new Board(10, 10);
-        Entity e = new Antibody("", new Pair<>(4, 4));
+        Board board = new Board(10,10);
+        Entity e = new Antibody("", new Pair<>(4, 4),board);
 
         Map<String, Integer> vars = new HashMap<>();
         vars.put("tester", 10);
@@ -215,12 +219,12 @@ class ParserTest {
 
     @Test
     void sensorTest() throws SyntaxErrorException {
-        new Board(10,10);
-        Entity v = new Virus("antibody left virus upright",new Pair<>(4,2));
-        Entity alsoV = new Virus("",new Pair<>(8,6));
-        Entity atb = new Antibody("",new Pair<>(2,2));
-        Entity alsoAtb = new Antibody("", new Pair<>(2,5));
-        Entity dummy = new Entities("",new Pair<>(9,0));
+        Board board = new Board(10,10);
+        Entity v = new Virus("antibody left virus upright",new Pair<>(4,2),board);
+        Entity alsoV = new Virus("",new Pair<>(8,6),board);
+        Entity atb = new Antibody("",new Pair<>(2,2),board);
+        Entity alsoAtb = new Antibody("", new Pair<>(2,5),board);
+        Entity dummy = new Entities("",new Pair<>(9,0),board);
 
         Map<String,Integer> vars = new HashMap<>();
 

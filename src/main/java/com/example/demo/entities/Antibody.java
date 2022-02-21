@@ -6,14 +6,12 @@ import com.example.demo.parseEngine.SyntaxErrorException;
 import com.example.demo.utility.Pair;
 
 public class Antibody extends Entities{
-
-
     private int killGain;
     private int moveCost;
     private int cost;
 
-    public Antibody(String geneticCode,Pair<Integer,Integer> location){
-        super(geneticCode, location);
+    public Antibody(String geneticCode,Pair<Integer,Integer> location,Board board){
+        super(geneticCode, location,board);
     }
 
     @Override
@@ -30,17 +28,17 @@ public class Antibody extends Entities{
             int targetY = startY + (distance * yIncrement);
 
             if(type == 1) {
-                Virus target = (Virus) Board.getEntity(targetX, targetY);
+                Virus target = (Virus) board.getEntity(targetX, targetY);
                 if(target.attacked(this)){
                     this.hp += killGain;
                     if(hp > maxHp) hp = maxHp;
-                    Board.delete(target);
+                    board.delete(target);
                 }
             }
             else{
-                Antibody target = (Antibody) Board.getEntity(targetX,targetY);
+                Antibody target = (Antibody) board.getEntity(targetX,targetY);
                 if(target.attacked(this)){
-                    Board.delete(target);
+                    board.delete(target);
                 }
             }
             return true;
@@ -50,7 +48,7 @@ public class Antibody extends Entities{
 
     public boolean forceMove(Pair<Integer,Integer> newlocation){
         if(this.hp - this.moveCost > 0){
-            if(Board.move(this,newlocation)){
+            if(board.move(this,newlocation)){
                 this.hp -= moveCost;
                 return true;
             }

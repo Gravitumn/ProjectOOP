@@ -10,6 +10,7 @@ import java.util.Collections;
 
 public class Entities implements Entity {
 
+    protected Board board;
     protected int hp;
     protected int maxHp;
     protected int atk;
@@ -17,8 +18,9 @@ public class Entities implements Entity {
     protected String geneticCode;
     protected Pair<Integer,Integer> location;
 
-    public Entities(String geneticCode,Pair<Integer,Integer> location){
-        if(Board.addEntity(this,location)) {
+    public Entities(String geneticCode,Pair<Integer,Integer> location,Board board){
+        if(board.addEntity(this,location)) {
+            this.board = board;
             this.geneticCode = geneticCode;
             this.location = location;
         }
@@ -35,7 +37,7 @@ public class Entities implements Entity {
         yCoordinate+=yIncrement;
 
         Pair<Integer,Integer> newLocation = factory.newPair(xCoordinate,yCoordinate);
-        if(Board.move(this,newLocation)){
+        if(board.move(this,newLocation)){
             this.location = newLocation;
         }
     }
@@ -49,14 +51,14 @@ public class Entities implements Entity {
     public int nearbyEntity(int direction) throws SyntaxErrorException {
         int startX = this.location.fst();
         int startY = this.location.snd();
-        Pair<Integer,Integer> boardSize = Board.size();
+        Pair<Integer,Integer> boardSize = board.size();
 
         int xIncrement = factory.newIncrement(direction).xIncrement();
         int yIncrement = factory.newIncrement(direction).yIncrement();
 
         startX += xIncrement;
         startY += yIncrement;
-        while(!Board.IsVirus(startX,startY) && !Board.IsAntibody(startX,startY)){
+        while(!board.IsVirus(startX,startY) && !board.IsAntibody(startX,startY)){
             startX+=xIncrement;
             startY+=yIncrement;
             if(startX > boardSize.fst() || startY > boardSize.snd() || startX < 0 || startY < 0 ||
@@ -64,8 +66,8 @@ public class Entities implements Entity {
                 return 0;
             }
         }
-        int distance = Board.findDistance(this.location, factory.newPair(startX,startY));
-        if(Board.IsVirus(startX,startY))
+        int distance = board.findDistance(this.location, factory.newPair(startX,startY));
+        if(board.IsVirus(startX,startY))
             return 10*distance +1;
         else
             return 10*distance+2;
@@ -74,7 +76,7 @@ public class Entities implements Entity {
     @Override
     public int nearbyVirus() throws SyntaxErrorException {
         ArrayList<Integer> distance = new ArrayList<>();
-        Pair<Integer,Integer> boardSize = Board.size();
+        Pair<Integer,Integer> boardSize = board.size();
 
         for(int i=1;i<=8;i++){
             boolean stop = false;
@@ -84,7 +86,7 @@ public class Entities implements Entity {
             int yIncrement = factory.newIncrement(i).yIncrement();
             startX += xIncrement;
             startY += yIncrement;
-            while(!Board.IsVirus(startX,startY) && !stop){
+            while(!board.IsVirus(startX,startY) && !stop){
                 startX+=xIncrement;
                 startY+=yIncrement;
                 if(startX > boardSize.fst() || startY > boardSize.snd() || startX < 0 || startY < 0){
@@ -92,7 +94,7 @@ public class Entities implements Entity {
                 }
             }
             if(!stop) {
-                distance.add(10 * Board.findDistance(this.location, factory.newPair(startX, startY)) + i);
+                distance.add(10 * board.findDistance(this.location, factory.newPair(startX, startY)) + i);
             }
         }
         if(distance.isEmpty())
@@ -104,7 +106,7 @@ public class Entities implements Entity {
     @Override
     public int nearbyAntibody() throws SyntaxErrorException {
         ArrayList<Integer> distance = new ArrayList<>();
-        Pair<Integer,Integer> boardSize = Board.size();
+        Pair<Integer,Integer> boardSize = board.size();
 
         for(int i=1;i<=8;i++){
             boolean stop = false;
@@ -114,7 +116,7 @@ public class Entities implements Entity {
             int yIncrement = factory.newIncrement(i).yIncrement();
             startX += xIncrement;
             startY += yIncrement;
-            while(!Board.IsAntibody(startX,startY) && !stop){
+            while(!board.IsAntibody(startX,startY) && !stop){
                 startX+=xIncrement;
                 startY+=yIncrement;
                 if(startX > boardSize.fst() || startY > boardSize.snd() || startX < 0 || startY < 0){
@@ -122,7 +124,7 @@ public class Entities implements Entity {
                 }
             }
             if(!stop) {
-                distance.add(10 * Board.findDistance(this.location, factory.newPair(startX, startY)) + i);
+                distance.add(10 * board.findDistance(this.location, factory.newPair(startX, startY)) + i);
             }
         }
         if(distance.isEmpty())

@@ -11,19 +11,19 @@ import java.util.LinkedList;
 
 public class Board{
     private static final Factory factory = Factory.instance();
-    static int x;
-    static int y;
-    private static Entity[][] grid;
-    private static LinkedList<Entity> queue;
+    int x;
+    int y;
+    private Entity[][] grid;
+    private LinkedList<Entity> queue;
 
     public Board(int m,int n){
-        Board.x = m;
-        Board.y = n;
+        this.x = m;
+        this.y = n;
         grid = new Entity[n][m];
         queue = new LinkedList<>();
     }
 
-    public static Entity getEntity(int x,int y){
+    public Entity getEntity(int x,int y){
         Entity e = null;
         try{
            e = grid[y][x];
@@ -39,7 +39,7 @@ public class Board{
      * @param secondloc a pair of x and y coordinate for second location on grid.
      * @return distance between these locations.
      */
-    public static int findDistance(Pair<Integer,Integer> firstloc,Pair<Integer,Integer> secondloc){
+    public int findDistance(Pair<Integer,Integer> firstloc,Pair<Integer,Integer> secondloc){
         return Math.max(Math.abs(firstloc.fst()-secondloc.fst()),Math.abs(firstloc.snd()-secondloc.snd()));
     }
 
@@ -49,8 +49,8 @@ public class Board{
      * @param y y coordinate of the point.
      * @return true if grid[x][y] is actually virus, otherwise, false.
      */
-    public static boolean IsVirus(int x,int y){
-        if(x >= Board.x || y >= Board.y || y < 0 || x < 0)return false;
+    public boolean IsVirus(int x,int y){
+        if(x >= this.x || y >= this.y || y < 0 || x < 0)return false;
         if(grid[y][x]==null) return false;
         return grid[y][x]instanceof Virus;
     }
@@ -61,8 +61,8 @@ public class Board{
      * @param y y coordinate of the point.
      * @return true if grid[x][y] is actually antibody, otherwise, false.
      */
-    public static boolean IsAntibody(int x,int y){
-        if(x >= Board.x || y >= Board.y || y < 0 || x < 0)return false;
+    public boolean IsAntibody(int x,int y){
+        if(x >= this.x || y >= this.y || y < 0 || x < 0)return false;
         if(grid[y][x]==null) return false;
         return grid[y][x]instanceof Antibody;
     }
@@ -72,7 +72,7 @@ public class Board{
      * @param e Specific entity
      * @param location pair of x coordinate and y coordinate.
      */
-    public static boolean addEntity(Entity e, Pair<Integer,Integer> location){
+    public boolean addEntity(Entity e, Pair<Integer,Integer> location){
         if(isAvailable(location)) {
             queue.add(e);
             grid[location.snd()][location.fst()] = e;
@@ -89,7 +89,7 @@ public class Board{
      *          otherwise, return false.
      * Side-effect : upon returning true, change location of this entity.
      */
-    public static boolean move(Entity e,Pair<Integer,Integer> newLocation){
+    public boolean move(Entity e,Pair<Integer,Integer> newLocation){
         if(isAvailable(newLocation))
         {
             grid[e.getLocation().snd()][e.getLocation().fst()] = null;
@@ -99,26 +99,26 @@ public class Board{
         else return false;
     }
 
-    public static Pair<Integer,Integer> size(){
-        return factory.newPair(Board.x,Board.y);
+    public Pair<Integer,Integer> size(){
+        return factory.newPair(this.x,this.y);
     }
 
-    private static boolean isAvailable(Pair<Integer,Integer> location){
+    private boolean isAvailable(Pair<Integer,Integer> location){
         return location.fst() >= 0 && location.fst() < x &&
                 location.snd() >= 0 && location.snd() < y &&
                 !IsVirus(location.fst(), location.snd()) &&
                 !IsAntibody(location.fst(), location.snd());
     }
 
-    public static void delete(Entity e){
+    public void delete(Entity e){
         Pair<Integer,Integer> loc = e.getLocation();
         grid[loc.snd()][loc.fst()] = null;
         queue.remove(e);
     }
 
-    public static void turnVirus(Entity e,String geneticCode){
+    public void turnVirus(Entity e,String geneticCode){
         Pair<Integer,Integer> loc = e.getLocation();
-        Board.delete(e);
-        Virus v = new Virus(geneticCode,loc);
+        this.delete(e);
+        Virus v = new Virus(geneticCode,loc,this);
     }
 }

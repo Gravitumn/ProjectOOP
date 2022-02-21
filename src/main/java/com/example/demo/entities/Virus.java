@@ -13,8 +13,8 @@ public class Virus extends Entities {
 
     private int lifeGain;
 
-    public Virus(String geneticCode,Pair<Integer,Integer> location){
-        super(geneticCode,location);
+    public Virus(String geneticCode,Pair<Integer,Integer> location,Board board){
+        super(geneticCode,location,board);
     }
 
     @Override
@@ -31,16 +31,16 @@ public class Virus extends Entities {
             int targetY = startY + (distance * yIncrement);
 
             if(type == 1) {
-                Virus target = (Virus) Board.getEntity(targetX, targetY);
+                Virus target = (Virus) board.getEntity(targetX, targetY);
                 if(target.attacked(this)){
                     target.killed();
                 }
             }
             else{
                 lifeSteal();
-                Antibody target = (Antibody) Board.getEntity(targetX,targetY);
+                Antibody target = (Antibody) board.getEntity(targetX,targetY);
                 if (target.attacked(this)) {  //if virus killed target
-                    Board.turnVirus(target,this.geneticCode);
+                    board.turnVirus(target,this.geneticCode);
                 }
             }
             return true;    //return true when attack hits
@@ -72,6 +72,6 @@ public class Virus extends Entities {
     }
 
     public void killed(){
-        Board.delete(this);
+        board.delete(this);
     }
 }
