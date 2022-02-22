@@ -11,6 +11,7 @@ import java.util.LinkedList;
 
 public class Board{
     private static final Factory factory = Factory.instance();
+    int credit = 0;
     int x;
     int y;
     private Entity[][] grid;
@@ -74,6 +75,9 @@ public class Board{
      */
     public boolean addEntity(Entity e, Pair<Integer,Integer> location){
         if(isAvailable(location)) {
+            if(e instanceof Antibody){
+                this.credit -= ((Antibody) e).getCost();
+            }
             queue.add(e);
             grid[location.snd()][location.fst()] = e;
             return true;
@@ -120,5 +124,9 @@ public class Board{
         Pair<Integer,Integer> loc = e.getLocation();
         this.delete(e);
         Virus v = new Virus(geneticCode,loc,this);
+    }
+
+    public void AddCredit(int credit){
+        this.credit+= credit;
     }
 }
