@@ -1,24 +1,30 @@
-import logo from './logo.svg';
 import './App.css';
-import React, {Component} from "react";
-import { withRouter } from 'react-router-dom'
-import { useHistory } from "react-router-dom";
+import React, { Component } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 
+//pages to be imported
+import Game from './Pages/Game'
+import About from './Pages/About'
+import Home from './Pages/Home'
+import Four04 from './Pages/Four04'
 
 
 function App() {
-  let history = useHistory();
-
-  function handleClick() {
-    history.push("/run");
-  }
 
   return (
-    <button type="button" onClick={handleClick}>
-       
-       <p><Link to='/run'>Go home</Link></p>
+    <div className='bg-blue-200 min-h-screen items-center'>
+      <Router>
+        <Routes>
+          <Route exact path='/' element={<Home />} />
+          <Route exact path='/about' element={<About />} />
+          <Route exact path='/game' element={<Game />} />
+          <Route path='*' element={<Four04 />} />
+        </Routes>
+      </Router>
 
-    </button>
+
+
+    </div>
   );
 
 }
