@@ -5,22 +5,23 @@ import com.example.demo.parseEngine.Factory;
 import com.example.demo.parseEngine.SyntaxErrorException;
 import com.example.demo.utility.Pair;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
+import javax.persistence.criteria.CriteriaBuilder;
+import java.util.*;
 
 public class Board{
-    GameLoop gameLoop;
+    GameState state;
     private static final Factory factory = Factory.instance();
     int x;
     int y;
-    private Entity[][] grid;
+    private final Entity[][] grid;
+    private Set<Pair<Integer,Integer>> availableSpace = new HashSet<>();
 
-    public Board(int m,int n,GameLoop gameLoop){
-        gameLoop = gameLoop;
+    public Board(int m,int n,GameState state){
+        this.state = state;
         this.x = m;
         this.y = n;
         grid = new Entity[n][m];
+        setSpace();
     }
 
     public Entity getEntity(int x,int y){
@@ -75,9 +76,14 @@ public class Board{
     public boolean addEntity(Entity e, Pair<Integer,Integer> location){
         if(isAvailable(location)) {
             if(e instanceof Antibody){
-                gameLoop.credits -= ((Antibody) e).getCost();
+                state.credits -= ((Antibody) e).getCost();
+                state.antibodyList.add((Antibody) e);
             }
-            gameLoop.queue.add(e);
+            else if (e instanceof Virus){
+                state.virusList.add((Virus) e);
+            }
+            availableSpace.remove(location);
+            state.queue.add(e);
             grid[location.snd()][location.fst()] = e;
             return true;
         }
@@ -95,8 +101,10 @@ public class Board{
     public boolean move(Entity e,Pair<Integer,Integer> newLocation){
         if(isAvailable(newLocation))
         {
+            availableSpace.add(e.getLocation());
             grid[e.getLocation().snd()][e.getLocation().fst()] = null;
             grid[newLocation.snd()][newLocation.fst()] = e;
+            availableSpace.remove(newLocation);
             return true;
         }
         else return false;
@@ -116,7 +124,12 @@ public class Board{
     public void delete(Entity e){
         Pair<Integer,Integer> loc = e.getLocation();
         grid[loc.snd()][loc.fst()] = null;
-        gameLoop.queue.remove(e);
+        availableSpace.add(loc);
+        if(e instanceof Virus)
+            state.virusList.remove(e);
+        else if(e instanceof Antibody)
+            state.antibodyList.remove(e);
+        state.queue.remove(e);
     }
 
     public void turnVirus(Entity e,String geneticCode){
@@ -125,4 +138,15 @@ public class Board{
         Virus v = new Virus(geneticCode,loc,this);
     }
 
+    public void setSpace(){
+        for(int i = 0;i<x;i++){
+            for(int j = 0;j<x;j++){
+                availableSpace.add(factory.newPair(i,j));
+            }
+        }
+    }
+
+    public Set<Pair<Integer, Integer>> getAvailableSpace() {
+        return availableSpace;
+    }
 }

@@ -23,16 +23,8 @@ import java.util.List;
 @RestController
 public class DemoApplication {
 
-	List<Antibody> antibodyList = new ArrayList<>();
-	List<Virus> virusList = new ArrayList<>();
-	List<Pair<Integer,Integer>> availableSpace=new ArrayList<>();
-
-
-	public int credits() {
-		return 0;
+	public DemoApplication(GameLoop gameLoop){
 	}
-
-
 
 
 }
