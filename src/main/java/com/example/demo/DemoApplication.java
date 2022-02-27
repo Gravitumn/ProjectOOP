@@ -1,31 +1,38 @@
 package com.example.demo;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
+import com.example.demo.entities.Antibody;
+import com.example.demo.entities.Virus;
 import com.example.demo.gameState.*;
+import com.example.demo.utility.Pair;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 @SpringBootApplication
 @RestController
 public class DemoApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+	List<Antibody> antibodyList = new ArrayList<>();
+	List<Virus> virusList = new ArrayList<>();
+	List<Pair<Integer,Integer>> availableSpace=new ArrayList<>();
+
+
+	public int credits() {
+		return 0;
 	}
 
-	@GetMapping(value = "/")
-	public String hello(){
-		return "Hello World!";
-	}
 
-	@GetMapping(value = "/run")
-	public String run(){
-		return "RUN";
-	}
+
 
 }

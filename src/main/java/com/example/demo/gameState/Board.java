@@ -10,18 +10,17 @@ import java.util.Collections;
 import java.util.LinkedList;
 
 public class Board{
+    GameLoop gameLoop;
     private static final Factory factory = Factory.instance();
-    int credit = 0;
     int x;
     int y;
     private Entity[][] grid;
-    private LinkedList<Entity> queue;
 
-    public Board(int m,int n){
+    public Board(int m,int n,GameLoop gameLoop){
+        gameLoop = gameLoop;
         this.x = m;
         this.y = n;
         grid = new Entity[n][m];
-        queue = new LinkedList<>();
     }
 
     public Entity getEntity(int x,int y){
@@ -76,9 +75,9 @@ public class Board{
     public boolean addEntity(Entity e, Pair<Integer,Integer> location){
         if(isAvailable(location)) {
             if(e instanceof Antibody){
-                this.credit -= ((Antibody) e).getCost();
+                gameLoop.credits -= ((Antibody) e).getCost();
             }
-            queue.add(e);
+            gameLoop.queue.add(e);
             grid[location.snd()][location.fst()] = e;
             return true;
         }
@@ -117,7 +116,7 @@ public class Board{
     public void delete(Entity e){
         Pair<Integer,Integer> loc = e.getLocation();
         grid[loc.snd()][loc.fst()] = null;
-        queue.remove(e);
+        gameLoop.queue.remove(e);
     }
 
     public void turnVirus(Entity e,String geneticCode){
@@ -126,7 +125,4 @@ public class Board{
         Virus v = new Virus(geneticCode,loc,this);
     }
 
-    public void AddCredit(int credit){
-        this.credit+= credit;
-    }
 }

@@ -5,14 +5,11 @@ import com.example.demo.entities.Entity;
 import com.example.demo.gameState.Board;
 import com.example.demo.utility.Pair;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class CmdParser{
     private CmdTokenizer tkz;
-    public Map<String, Integer> vars;
+    public Map<String, Integer> vars = new HashMap<>();
     Factory factory;
     private final Entity current_unit;
     private Random rng;
@@ -23,10 +20,9 @@ public class CmdParser{
                     "then","up","upleft","upright","virus","while")
     );
 
-    public CmdParser(Map<String, Integer> vars,String cmd,Entity e) throws SyntaxErrorException {
-        this.tkz = new CmdTokenizer(cmd);
+    public CmdParser(Entity e) throws SyntaxErrorException {
+        this.tkz = new CmdTokenizer(e.getCode());
         this.current_unit = e;
-        this.vars = vars;
         factory = Factory.instance();
         rng = new Random();
         tired=false;

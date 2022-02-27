@@ -40,6 +40,9 @@ public class CmdTokenizer implements Tokenizer{
         StringBuilder s = new StringBuilder();
             while (pos < cmd.length() && Character.isWhitespace(cmd.charAt(pos)))
                 pos++;  // ignore whitespace
+        if(atEndOfSauce()) {
+            throw new SyntaxErrorException("There is no statement");
+        }
             char c = cmd.charAt(pos);
             if (Character.isDigit(c)) {  // start of number
                 s.append(c);

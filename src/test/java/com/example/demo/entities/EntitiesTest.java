@@ -19,15 +19,15 @@ class EntitiesTest {
 
     @Test
     void changeLocation() throws SyntaxErrorException, EvalError {
-        Board board = new Board(10,10);
+        Board board = new Board(10,10,null);
         Virus v = new Virus("move right",factory.newPair(2,2),board); //expect result = 3,2
         Virus v1 = new Virus("move left",factory.newPair(3,2),board); //expect result = 2,2
         //after parsing, both v and v1 shouldn't move. Their location should remain the same.
         //because both 3,2 and 2,2 are not available to move.
         Pair<Integer,Integer> vloc = v.location;
         Pair<Integer,Integer> v1loc = v1.location;
-        CmdParser cmd = new CmdParser(new HashMap<>(),v.geneticCode,v);
-        cmd = new CmdParser(new HashMap<>(),v1.geneticCode,v1);
+        CmdParser cmd = new CmdParser(v);
+        cmd = new CmdParser(v1);
         cmd.parseProgram();
         assertEquals(vloc,v.location);
         assertEquals(v1loc,v1.location);
@@ -35,20 +35,20 @@ class EntitiesTest {
         //lower boundary checking.
         Virus v2 = new Virus(" move  up  ",factory.newPair(0,0),board);
         Pair<Integer,Integer> v2loc = v2.location;
-        cmd = new CmdParser(new HashMap<>(),v2.geneticCode,v2);
+        cmd = new CmdParser(v2);
         cmd.parseProgram();
         assertEquals(v2loc,v2.location);
 
         //upper boundary checking.
         Virus v3 = new Virus("move down",factory.newPair(9,9),board);
         Pair<Integer,Integer> v3loc = v3.location;
-        cmd = new CmdParser(null,v3.geneticCode,v3);
+        cmd = new CmdParser(v3);
         cmd.parseProgram();
         assertEquals(v3loc,v3.location);
 
         //right location
         Virus v4 = new Virus("  {   move upright}",factory.newPair(6,2),board);
-        cmd = new CmdParser(null, v4.geneticCode, v4);
+        cmd = new CmdParser( v4);
         cmd.parseProgram();
         System.out.println(v4.getLocation());
         assertEquals(board.getEntity(7,1),v4);
@@ -57,7 +57,7 @@ class EntitiesTest {
     @Test
     void VirusAttackAntibody() throws SyntaxErrorException, EvalError {
         //set up environment
-        Board board = new Board(10,10);
+        Board board = new Board(10,10,null);
         Virus v = new Virus("shoot upright", factory.newPair(1,4),board);
         Antibody a = new Antibody(" ",factory.newPair(3,2),board);
         Virus dummy = new Virus(" ",factory.newPair(4,1),board);
@@ -65,7 +65,7 @@ class EntitiesTest {
         a.setAtk(20);a.setHP(100);
         dummy.setHP(100);dummy.setAtk(10);
 
-        CmdParser cmd = new CmdParser(new HashMap<>(),v.geneticCode,v);
+        CmdParser cmd = new CmdParser(v);
         cmd.parseProgram();
 
         assertEquals(70,a.hp);  //target should be Antibody a.
@@ -76,7 +76,7 @@ class EntitiesTest {
     @Test
     void antibodyAttackVirus() throws SyntaxErrorException, EvalError {
         //set up environment
-        Board board = new Board(10,10);
+        Board board = new Board(10,10,null);
         Virus v = new Virus("shoot upright", factory.newPair(1,4),board);
         Antibody a = new Antibody(" shoot downleft",factory.newPair(3,2),board);
         Virus dummy = new Virus(" ",factory.newPair(4,1),board);
@@ -84,7 +84,7 @@ class EntitiesTest {
         a.setAtk(20);a.setHP(100);
         dummy.setHP(100);dummy.setAtk(10);
 
-        CmdParser cmd = new CmdParser(new HashMap<>(),a.geneticCode,a);
+        CmdParser cmd = new CmdParser(a);
         cmd.parseProgram();
 
         assertEquals(80,v.hp);
@@ -94,15 +94,15 @@ class EntitiesTest {
     @Test
     void VirusAttackVirus() throws SyntaxErrorException, EvalError {
         //set up env
-        Board board = new Board(10,10);
+        Board board = new Board(10,10,null);
         Virus v = new Virus("shoot upright", factory.newPair(1,4),board);
         Virus dummy = new Virus("shoot downleft",factory.newPair(4,1),board);
         v.setAtk(40);v.setHP(100);
         dummy.setHP(100);dummy.setAtk(10);
 
-        CmdParser cmd = new CmdParser(new HashMap<>(),v.geneticCode,v);
+        CmdParser cmd = new CmdParser(v);
         cmd.parseProgram();
-        cmd = new CmdParser(new HashMap<>(),dummy.geneticCode,dummy);
+        cmd = new CmdParser(dummy);
         cmd.parseProgram();
 
         assertEquals(60,dummy.hp);  //both virus attacked each other.
@@ -112,15 +112,15 @@ class EntitiesTest {
     @Test
     void AntibodyAttackAntibody() throws SyntaxErrorException, EvalError {
         //set up env
-        Board board = new Board(10,10);
+        Board board = new Board(10,10,null);
         Antibody a = new Antibody(" shoot down",factory.newPair(2,2),board);
         Antibody a1 = new Antibody(" shoot up",factory.newPair(2,4),board);
         a.setAtk(30);a.setHP(120);
         a1.setAtk(20);a1.setHP(60);
 
-        CmdParser cmd = new CmdParser(new HashMap<>(),a.geneticCode,a);
+        CmdParser cmd = new CmdParser(a);
         cmd.parseProgram();
-        cmd = new CmdParser(new HashMap<>(),a1.geneticCode,a1);
+        cmd = new CmdParser(a1);
         cmd.parseProgram();
 
         assertEquals(100,a.hp);
@@ -130,14 +130,14 @@ class EntitiesTest {
     @Test
     void AntibodyKillAntibody() throws SyntaxErrorException, EvalError {
         //set up env
-        Board board = new Board(10,10);
+        Board board = new Board(10,10,null);
         Antibody a = new Antibody(" shoot down",factory.newPair(2,2),board);
         Antibody a1 = new Antibody(" shoot up",factory.newPair(2,4),board);
         a.setAtk(30);a.setHP(120);
         a1.setAtk(20);a1.setHP(30);
 
         assertEquals(board.getEntity(2,4),a1);
-        CmdParser cmd = new CmdParser(new HashMap<>(),a.geneticCode,a);
+        CmdParser cmd = new CmdParser(a);
         cmd.parseProgram();
         assertEquals(120,a.hp); //a's hp should remain the same.
         assertEquals(0,a1.hp);
@@ -147,17 +147,17 @@ class EntitiesTest {
     @Test
     void AntibodyKillVirus() throws SyntaxErrorException, EvalError {
         //set up env
-        Board board = new Board(10,10);
+        Board board = new Board(10,10,null);
         Antibody a = new Antibody(" shoot down",factory.newPair(2,2),board);
         Virus a1 = new Virus(" shoot up",factory.newPair(2,4),board);
         a.setAtk(30);a.setHP(120);a.setKillGain(40);
         a1.setAtk(20);a1.setHP(30);
 
         assertEquals(board.getEntity(2,4),a1);
-        CmdParser cmd = new CmdParser(new HashMap<>(),a1.geneticCode,a1);
+        CmdParser cmd = new CmdParser(a1);
         cmd.parseProgram();
         assertEquals(100,a.hp); //a's hp reduced from a1's attack.
-        cmd = new CmdParser(new HashMap<>(),a.geneticCode,a);
+        cmd = new CmdParser(a);
         cmd.parseProgram();
         assertEquals(120,a.hp); //a's hp should increased from killgain.
         assertEquals(0,a1.hp);
@@ -167,16 +167,16 @@ class EntitiesTest {
     @Test
     void VirusKillVirus() throws SyntaxErrorException, EvalError {
         //set up env
-        Board board = new Board(10,10);
+        Board board = new Board(10,10,null);
         Virus v = new Virus("shoot upright", factory.newPair(1,4),board);
         Virus dummy = new Virus("shoot downleft",factory.newPair(4,1),board);
         v.setAtk(40);v.setHP(100);v.setLifeGain(30);
         dummy.setHP(30);dummy.setAtk(50);
 
-        CmdParser cmd = new CmdParser(new HashMap<>(),dummy.geneticCode,dummy);
+        CmdParser cmd = new CmdParser(dummy);
         cmd.parseProgram();
         assertEquals(50,v.hp); //v's hp decreased from dummy's attack.
-        cmd = new CmdParser(new HashMap<>(),v.geneticCode,v);
+        cmd = new CmdParser(v);
         cmd.parseProgram();
 
         assertEquals(-10,dummy.hp);  //both virus attacked each other.
@@ -186,13 +186,13 @@ class EntitiesTest {
     @Test
     void VirusKillAntibody() throws SyntaxErrorException, EvalError {
         //set up environment
-        Board board = new Board(10,10);
+        Board board = new Board(10,10,null);
         Virus v = new Virus("shoot upright", factory.newPair(1,4),board);
         Antibody a = new Antibody(" ",factory.newPair(3,2),board);
         v.setAtk(30);v.setHP(100);v.setLifeGain(20);v.hp = 20;
         a.setAtk(20);a.setHP(30);
 
-        CmdParser cmd = new CmdParser(new HashMap<>(),v.geneticCode,v);
+        CmdParser cmd = new CmdParser(v);
         cmd.parseProgram();
 
         assertEquals(0,a.hp);  //target should be Antibody a.
@@ -203,7 +203,7 @@ class EntitiesTest {
 
     @Test
     void nearbyEntity() throws SyntaxErrorException {
-        Board board = new Board(10,10);
+        Board board = new Board(10,10,null);
         Virus v = new Virus("{}",factory.newPair(1,4),board);
         Antibody a = new Antibody("{}",factory.newPair(2,3),board);
         Antibody a1 = new Antibody("{}",factory.newPair(3,1),board);
@@ -225,7 +225,7 @@ class EntitiesTest {
 
     @Test
     void nearbyVirus() throws SyntaxErrorException {
-        Board board = new Board(10,10);
+        Board board = new Board(10,10,null);
         Virus v = new Virus("{}",factory.newPair(1,3),board);
         Antibody a = new Antibody("{}",factory.newPair(3,1),board);
         assertEquals(26,a.nearbyVirus());
@@ -233,7 +233,7 @@ class EntitiesTest {
 
     @Test
     void VirusAfar() throws SyntaxErrorException {
-        Board board = new Board(10,10);
+        Board board = new Board(10,10,null);
         Virus v = new Virus("{}",factory.newPair(0,0),board);
         Virus v1 = new Virus("{}",factory.newPair(4,4),board);
         assertEquals(48,v1.nearbyVirus());
@@ -241,7 +241,7 @@ class EntitiesTest {
 
     @Test
     void NoVirus() throws SyntaxErrorException {
-        Board board = new Board(10,10);
+        Board board = new Board(10,10,null);
         Antibody a = new Antibody("{}",factory.newPair(1,2),board);
         Antibody a1 = new Antibody("{}", factory.newPair(2,1),board);
         assertEquals(0,a.nearbyVirus());
@@ -250,7 +250,7 @@ class EntitiesTest {
 
     @Test
     void VirusNotInPath() throws SyntaxErrorException {
-        Board board = new Board(10,10);
+        Board board = new Board(10,10,null);
         Virus v = new Virus("{}",factory.newPair(1,3),board );
         Virus v1 = new Virus("{}",factory.newPair(3,3),board);
         Antibody a = new Antibody("{}",factory.newPair(2,1),board);
@@ -259,7 +259,7 @@ class EntitiesTest {
 
     @Test
     void NearestVirus() throws SyntaxErrorException {
-        Board board = new Board(10,10);
+        Board board = new Board(10,10,null);
         Virus v = new Virus("{}",factory.newPair(2,0),board);
         Virus v1 = new Virus("{}",factory.newPair(3,0),board);
         Virus v2 = new Virus("{}",factory.newPair(4,0),board);
@@ -269,7 +269,7 @@ class EntitiesTest {
 
     @Test
     void nearbyAntibody() throws SyntaxErrorException {
-        Board board = new Board(10,10);
+        Board board = new Board(10,10,null);
         Antibody a = new Antibody("{}",factory.newPair(2,1),board);
         Antibody a1 = new Antibody("{}",factory.newPair(4,3),board);
         assertEquals(24,a.nearbyAntibody());
@@ -277,7 +277,7 @@ class EntitiesTest {
 
     @Test
     void NoAntibody() throws SyntaxErrorException {
-        Board board = new Board(10,10);
+        Board board = new Board(10,10,null);
         Antibody a = new Antibody("{}",factory.newPair(2,0),board);
         Virus v = new Virus("{}",factory.newPair(1,0),board);
         assertEquals(0,a.nearbyAntibody());
@@ -286,7 +286,7 @@ class EntitiesTest {
 
     @Test
     void AntibodyNotInPath() throws SyntaxErrorException {
-        Board board = new Board(10,10);
+        Board board = new Board(10,10,null);
         Virus v = new Virus("{}",factory.newPair(1,1),board);
         Antibody a = new Antibody("{}",factory.newPair(0,3),board);
         Antibody a1 = new Antibody("{}",factory.newPair(2,4),board);
@@ -295,7 +295,7 @@ class EntitiesTest {
 
     @Test
     void NearestAntibody() throws SyntaxErrorException {
-        Board board = new Board(10,10);
+        Board board = new Board(10,10,null);
         Virus v = new Virus("{}",factory.newPair(0,0),board);
         Antibody a = new Antibody("{}",factory.newPair(2,0),board);
         Antibody a1 = new Antibody("{}",factory.newPair(2,2),board);
@@ -304,7 +304,7 @@ class EntitiesTest {
 
     @Test
     void forcemove(){
-        Board board = new Board(10,10);
+        Board board = new Board(10,10,null);
         Antibody a1 = new Antibody("{}",factory.newPair(2,0),board);
         Antibody a2 = new Antibody("{}",factory.newPair(4,0),board);
         a1.setHP(100);a1.setMoveCost(30);
