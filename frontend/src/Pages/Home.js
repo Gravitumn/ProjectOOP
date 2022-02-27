@@ -24,22 +24,22 @@ function Home() {
         return (
             <div className="p-6 mx-4 bg-gray-200">
                 {/* header */}
-                <div className="text-xl">
+                <div className="text-xl font-semibold">
                     How to play
                 </div>
 
                 {/* goal */}
-                <div className="mt-6">
+                <div className="mt-6 my-6">
                     Player's goal is to survive a designated number of rounds swarmed by viruses to win.
                 </div>
 
                 {/* shows controls */}
-                <div className="">
+                <div className="mb-6">
                     Click to deploy, but remember, you have limited funds. Always plan to spend your fund carefully
 
                     Any antivirus defeated by a virus will turn into one.
 
-                    If you are out of funds and have no antiviruses on the field, it will result in game over.
+                    If your lives reach 0, it will result in game over.
 
                     Once a wave is cleared, you gain more funds to deploy more antiviruses.
                 </div>
@@ -50,20 +50,18 @@ function Home() {
 
     return (
         <div classname='flex-col justify-center'>
-            <div class="p-6 max-w-screen mx-4 bg-white shadow-lg items-center">
+            <div class="p-6 max-w-screen mx-4 bg-white shadow-lg items-center md:bg-carin sm:bg-carin_sm">
 
-                <div className="flex flex-row justify-between">
-                    <div className="rounded-md" onClick={() => { nav('/game') }} onMouseOver={() => { setMouzIn(true) }} onMouseLeave={() => { setMouzIn(false) }}>
+                <div className="flex flex-row justify-between my-48">
+                    <div className="rounded-md mt-20" onClick={() => { nav('/game') }} onMouseOver={() => { setMouzIn(true) }} onMouseLeave={() => { setMouzIn(false) }}>
                         <a href=''>
                             {icon()}
                         </a>
                     </div>
-                    <div className='align-right'>
-                        <div class="text-xl font-medium text-black">Game name here</div>
-                        <p class="text-slate-500">Can you protect your body?</p>
+                    <div className='text-right my-16 mr-4'>
+                        <div className="text-slate-100 text-3xl">Can you protect your body?  </div>
                     </div>
-                    
-
+                
                 </div>
                 {/* 404 test - debug only */}
                 <div onClick={() => { nav('*') }}>

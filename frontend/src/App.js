@@ -12,7 +12,7 @@ import Four04 from './Pages/Four04'
 function App() {
 
   return (
-    <div className='bg-gray-500 min-h-screen items-center'>
+    <div className='bg-red-400 min-h-screen items-center'>
       <Router>
         <Routes>
           <Route exact path='/' element={<Home />} />
