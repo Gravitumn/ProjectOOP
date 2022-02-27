@@ -1,11 +1,6 @@
 import React from "react";
 import { useNavigate } from 'react-router-dom'
-
-const pauz = () => {
-    return (
-        <img src='./Components/images/pauz_50x50.svg'/>
-    )
-}
+import Pauz from './Components/images/pauz.png'
 
 
 function Game() {
@@ -16,12 +11,12 @@ function Game() {
             {/* game bar */}
             <div className="bg-gray-800 flex mx-auto flex-row justify-around text-slate-300">
                 {/* pause */}
-                <div onClick={() => {}}>
-                    {pauz()}
+                <div onClick={() => { }}>
+                    <img src={Pauz} alt='Pause' width='40px' height='40px'/>
                 </div>
                 {/* virus left */}
                 <div>
-                     10/10
+                    10/10
                 </div>
                 {/*wave counter*/}
                 <div>
