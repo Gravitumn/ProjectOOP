@@ -3,8 +3,11 @@ import React from "react";
 
 function About() {
     return (
-        <div>
-            About us
+        <div className="bg-white ">
+            <div className="text-bold">About us</div>
+            <div>
+                
+            </div>
         </div>
     )
 }

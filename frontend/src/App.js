@@ -1,5 +1,5 @@
 import './App.css';
-import React, { Component } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 
 //pages to be imported
@@ -12,7 +12,7 @@ import Four04 from './Pages/Four04'
 function App() {
 
   return (
-    <div className='bg-blue-200 min-h-screen items-center'>
+    <div className='bg-gray-500 min-h-screen items-center'>
       <Router>
         <Routes>
           <Route exact path='/' element={<Home />} />
@@ -21,9 +21,6 @@ function App() {
           <Route path='*' element={<Four04 />} />
         </Routes>
       </Router>
-
-
-
     </div>
   );
 

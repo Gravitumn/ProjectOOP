@@ -1,0 +1,9 @@
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg" version="1.1">
+
+ <g transform="matrix(1, 0, 0, 1, 0.447772, -0.247561)">
+  <title>Layer 1</title>
+  <g id="g-1" transform="matrix(1.17201 0 0 1.16438 -0.844565 4.36488)" display=" inline">
+   <path fill=" rgb(65, 162, 65)" id="path-1" d="m3.53459,78.78864l0,-78.92821l78.96997,39.4641l-78.96997,39.46411z" stroke=" rgb(0, 0, 0)" stroke-width="6.85078" stroke-miterlimit="4" stroke-dasharray=" none" stroke-linejoin=" round"/>
+  </g>
+ </g>
+</svg>

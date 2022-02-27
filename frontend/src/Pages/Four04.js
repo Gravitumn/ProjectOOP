@@ -1,6 +1,6 @@
 import React from "react";
-import { Route } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import { ReactComponent as SadEmoji } from './Components/images/d_.svg'
 
 function Four04() {
     let nav = useNavigate()
@@ -20,11 +20,24 @@ function Four04() {
 
 
     return (
-        <div className="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4">
-            <div className="text-center">404 not found</div>
-            <div>You will be redirected soon.</div>
-            {home()}
+        <div className="min-h-screen items-center">
+            <div className="flex-col p-6 max-w-sm sm:mx-auto -px-4 bg-white shadow-lg flex items-center content-center space-x-4">
+                <div className="text-3xl font-bold italic underline-offset-2 mb-4">404: not found</div>
+                <div>
+                    <SadEmoji />
+                </div> {/*images*/}
+                <div>You will be redirected soon.</div>
+                <div classname='bg-gray-400 shadow-lg' onClick={() => {baccToHome()}}>
+                    Or click here to go back
+                </div>
+
+                {/*{home()}*/}    {/*redirect fn here*/}
+            </div>
+            <div className="text-center">
+                @2022 by abc team
+            </div>
         </div>
+
     )
 }
 
