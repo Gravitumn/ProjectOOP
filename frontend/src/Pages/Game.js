@@ -16,18 +16,23 @@ function Game() {
     const page = () => {
         if (paused) {
             return (
-                <div className="min-h-screen items-center">
-                    <button className="bg-green-200" onClick={() => {setPaused=(false)}}>
-                        Continue
-                    </button>
-                    <button className="bg-red-200">
-                        Quit
-                    </button>
+                <div className="bg-gray-500 flex items-center min-h-screen flex-col my-auto">
+                    <div className="text-3xl font-semibold my-12">
+                        Paused
+                    </div>
+                    <div>
+                        <button className="p-2 rounded bg-green-200 mx-4" onClick={() => { setPaused(false) }}>
+                            Continue
+                        </button>
+                        <button className="p-2 rounded bg-red-200 mx-4" onClick={() => { nav('/') }}>
+                            Quit
+                        </button>
+                    </div>
                 </div>
             )
         }
         return (
-            <div>
+            <div className="">
                 {/* game bar */}
                 <div className="bg-gray-800 flex mx-auto flex-row justify-around text-slate-300 my-auto items-center">
                     {/* pause */}
@@ -55,10 +60,8 @@ function Game() {
                     </div>
                 </div>
 
-
                 <GamePad />
 
-                <button onClick={() => nav('/')}>Back</button>
             </div>
         )
     }
