@@ -14,6 +14,13 @@ import java.util.List;
 
 public class GameLoop {
 
+    Board board;
+    GameState state;
+
+    public GameLoop(Board board,GameState state){
+        this.board = board;
+        this.state = state;
+    }
 
     public void gameStart() throws SyntaxErrorException, EvalError {
         /*while(!virusList.isEmpty() && !antibodyList.isEmpty() ){

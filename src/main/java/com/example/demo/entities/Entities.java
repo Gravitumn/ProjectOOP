@@ -2,6 +2,7 @@ package com.example.demo.entities;
 
 
 import com.example.demo.gameState.Board;
+import com.example.demo.gameState.ConfigReader;
 import com.example.demo.parseEngine.Factory;
 import com.example.demo.parseEngine.SyntaxErrorException;
 import com.example.demo.utility.Pair;
@@ -167,5 +168,10 @@ public class Entities implements Entity {
     @Override
     public Pair<Integer, Integer> getLocation() {
         return this.location;
+    }
+
+    @Override
+    public void setUpEntity(ConfigReader cf){
+        //subclasses will handle this.
     }
 }

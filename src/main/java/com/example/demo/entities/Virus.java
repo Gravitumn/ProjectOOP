@@ -1,6 +1,7 @@
 package com.example.demo.entities;
 
 import com.example.demo.gameState.Board;
+import com.example.demo.gameState.ConfigReader;
 import com.example.demo.parseEngine.Factory;
 import com.example.demo.parseEngine.SyntaxErrorException;
 import com.example.demo.utility.Increment;
@@ -73,5 +74,13 @@ public class Virus extends Entities {
 
     public void killed(){
         board.delete(this);
+    }
+
+    @Override
+    public void setUpEntity(ConfigReader cf){
+        this.hp = cf.getVirusHP();
+        this.atk = cf.getVirusAtk();
+        this.maxHp = cf.getVirusHP();
+        this.lifeGain = cf.getVirusGain();
     }
 }

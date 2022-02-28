@@ -1,5 +1,6 @@
 package com.example.demo.entities;
 
+import com.example.demo.gameState.ConfigReader;
 import com.example.demo.parseEngine.SyntaxErrorException;
 import com.example.demo.utility.Pair;
 
@@ -63,4 +64,9 @@ public interface Entity {
 
     boolean attacked(Antibody attacker);
 
+    /**
+     * set up status of this entity by using data from configuration file.
+     * @param cf the configreader that used for set-up.
+     */
+    void setUpEntity(ConfigReader cf);
 }

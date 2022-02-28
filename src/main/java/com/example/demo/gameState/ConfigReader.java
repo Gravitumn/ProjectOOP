@@ -9,18 +9,18 @@ import java.util.Scanner;
 
 public class ConfigReader {
 
-    static int x,y;
-    static int spawnRate;
-    static int Credit,Cost;
-    static int virusHP,antibodyHP;
-    static int virusAtk,virusGain;
-    static int antiAtk,antiGain;
-    static int moveCost;
-    static Factory factory=Factory.instance();
+    int x,y;
+    int spawnRate;
+    int Credit,Cost;
+    int virusHP,antibodyHP;
+    int virusAtk,virusGain;
+    int antiAtk,antiGain;
+    int moveCost;
+    Factory factory=Factory.instance();
 
-    protected static final String inFile = "src/main/java/com/example/demo/config.txt";
+    protected final String inFile = "src/main/java/com/example/demo/config.txt";
 
-    public static void Setup(){
+    private void Setup(){
         try(FileReader fr = new FileReader(inFile);
             Scanner s = new Scanner(fr) ){
             System.out.println(s.nextInt());
@@ -40,51 +40,51 @@ public class ConfigReader {
         }catch(IOException e){e.printStackTrace();}
     }
 
-    public static void main(String[] args){
-        ConfigReader.Setup();
+    public ConfigReader(){
+        this.Setup();
     }
 
-    public static Pair<Integer, Integer> getCoordinate() {
+    public Pair<Integer, Integer> getCoordinate() {
         return factory.newPair(x,y);
     }
 
-    public static int getSpawnRate() {
+    public int getSpawnRate() {
         return spawnRate;
     }
 
-    public static int getCredit() {
+    public int getCredit() {
         return Credit;
     }
 
-    public static int getCost() {
+    public int getCost() {
         return Cost;
     }
 
-    public static int getVirusHP() {
+    public int getVirusHP() {
         return virusHP;
     }
 
-    public static int getAntibodyHP() {
+    public int getAntibodyHP() {
         return antibodyHP;
     }
 
-    public static int getVirusAtk() {
+    public int getVirusAtk() {
         return virusAtk;
     }
 
-    public static int getVirusGain() {
+    public int getVirusGain() {
         return virusGain;
     }
 
-    public static int getAntiAtk() {
+    public int getAntiAtk() {
         return antiAtk;
     }
 
-    public static int getAntiGain() {
+    public int getAntiGain() {
         return antiGain;
     }
 
-    public static int getMoveCost() {
+    public int getMoveCost() {
         return moveCost; //ez
     }
 }
