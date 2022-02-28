@@ -14,12 +14,15 @@ import java.util.List;
 
 public class GameLoop {
 
+    ConfigReader cf;
     Board board;
     GameState state;
 
-    public GameLoop(Board board,GameState state){
-        this.board = board;
+    public GameLoop(GameState state){
+        cf = new ConfigReader();
+        Pair<Integer,Integer> size = cf.getCoordinate();
         this.state = state;
+        this.board = new Board(size.fst(), size.snd(), state);
     }
 
     public void gameStart() throws SyntaxErrorException, EvalError {
@@ -30,6 +33,4 @@ public class GameLoop {
             }
         }*/
     }
-
-    //----------------------------------------------- setter & getter -------------------------------------
 }

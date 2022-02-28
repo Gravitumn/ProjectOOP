@@ -5,3 +5,14 @@
 20 5
 30 10
 25
+25
+
+----------------
+size(x and y)
+spawn rate
+initial credit, placement cost
+virushealth AntibodyHealth
+virusATK    virusLifeSteal
+AntibodyATK AntibodyKillGain
+moveCost
+CreditGain

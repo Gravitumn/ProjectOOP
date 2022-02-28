@@ -10,6 +10,7 @@ public class Antibody extends Entities{
     private int killGain;
     private int moveCost;
     private int cost;
+    private int creditGain;
 
     public Antibody(String geneticCode,Pair<Integer,Integer> location,Board board){
         super(geneticCode, location,board);
@@ -91,6 +92,8 @@ public class Antibody extends Entities{
         return moveCost;
     }
 
+    public int getCreditGain(){return creditGain;}
+
     @Override
     public void setUpEntity(ConfigReader cf) {
         this.hp = cf.getAntibodyHP();
@@ -99,5 +102,6 @@ public class Antibody extends Entities{
         this.maxHp = cf.getAntibodyHP();
         this.cost = cf.getCost();
         this.killGain = cf.getAntiGain();
+        this.creditGain = cf.getCreditGain();
     }
 }

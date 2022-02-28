@@ -16,6 +16,7 @@ public class ConfigReader {
     int virusAtk,virusGain;
     int antiAtk,antiGain;
     int moveCost;
+    int creditGain;
     Factory factory=Factory.instance();
 
     protected final String inFile = "src/main/java/com/example/demo/config.txt";
@@ -36,6 +37,7 @@ public class ConfigReader {
             antiAtk=s.nextInt();
             antiGain=s.nextInt();
             moveCost=s.nextInt();
+            creditGain=s.nextInt();
 
         }catch(IOException e){e.printStackTrace();}
     }
@@ -87,5 +89,7 @@ public class ConfigReader {
     public int getMoveCost() {
         return moveCost; //ez
     }
+
+    public int getCreditGain(){return creditGain;}
 }
 
