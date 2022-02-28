@@ -17,6 +17,7 @@ public class GameLoop {
     ConfigReader cf;
     Board board;
     GameState state;
+    boolean stop = false;
 
     public GameLoop(GameState state){
         cf = new ConfigReader();
@@ -26,11 +27,18 @@ public class GameLoop {
     }
 
     public void gameStart() throws SyntaxErrorException, EvalError {
-        /*while(!virusList.isEmpty() && !antibodyList.isEmpty() ){
-            for (Entity entity : queue) {
-                CmdParser parser = new CmdParser(entity);
-                parser.parseProgram();
+        while(!state.virusList.isEmpty() && !state.antibodyList.isEmpty() ){
+            if(!stop) {
+                for (Entity entity : state.queue) {
+                    CmdParser parser = new CmdParser(entity);
+                    parser.parseProgram();
+                }
             }
-        }*/
+        }
+    }
+
+    public void toggleStop(){
+        if(stop)stop=false;
+        stop=true;
     }
 }
