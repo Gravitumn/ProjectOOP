@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class GameLoop {
+public class GameLoop extends Thread{
 
     ConfigReader cf;
     Board board;
@@ -26,19 +26,24 @@ public class GameLoop {
         this.board = new Board(size.fst(), size.snd(), state);
     }
 
-    public void gameStart() throws SyntaxErrorException, EvalError {
-        while(!state.virusList.isEmpty() && !state.antibodyList.isEmpty() ){
-            if(!stop) {
-                for (Entity entity : state.queue) {
-                    CmdParser parser = new CmdParser(entity);
-                    parser.parseProgram();
+    public void run() {
+        try {
+            while (!state.virusList.isEmpty() && !state.antibodyList.isEmpty()) {
+                if (stop) {
+                    wait();
+                } else {
+                    for (Entity entity : state.queue) {
+                        CmdParser parser = new CmdParser(entity);
+                        parser.parseProgram();
+                        Thread.sleep((long) state.gameSpeed*100);
+                    }
                 }
             }
         }
+        catch (SyntaxErrorException | EvalError | InterruptedException e){e.printStackTrace();}
+        }
     }
 
-    public void toggleStop(){
-        if(stop)stop=false;
-        stop=true;
-    }
+
+
 }
