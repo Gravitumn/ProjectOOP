@@ -13,10 +13,12 @@ function Game() {
 
     const [paused, setPaused] = useState(false)
 
+    
     const page = () => {
         if (paused) {
+            //pause page
             return (
-                <div className="bg-gray-500 flex items-center min-h-screen flex-col my-auto">
+                <div className="bg-gray-300 flex items-center min-h-screen flex-col my-auto">
                     <div className="text-3xl font-semibold my-12">
                         Paused
                     </div>
@@ -31,6 +33,7 @@ function Game() {
                 </div>
             )
         }
+        //game page
         return (
             <div className="">
                 {/* game bar */}
@@ -68,7 +71,8 @@ function Game() {
 
 
     return (
-        <div>
+        <div className="bg-gray-300">  
+            {/* injects code */}
             {page()}
         </div>
     )
