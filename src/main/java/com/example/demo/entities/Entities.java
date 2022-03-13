@@ -20,9 +20,9 @@ public class Entities implements Entity {
     protected String geneticCode;
     protected Pair<Integer,Integer> location;
 
-    public Entities(String geneticCode,Pair<Integer,Integer> location,Board board){
+    public Entities(String geneticCode, Pair<Integer,Integer> location, int universe){
+        board = Board.instance(universe);
         if(board.addEntity(this,location)) {
-            this.board = board;
             this.geneticCode = geneticCode;
             this.location = location;
         }

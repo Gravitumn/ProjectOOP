@@ -1,3 +1,4 @@
+/*
 package com.example.demo.gameState;
 
 import com.example.demo.entities.Antibody;
@@ -136,4 +137,4 @@ class BoardTest {
         assertEquals(board.getEntity(9,1),a3);
         assertEquals(board.getEntity(9,9),a4);
     }
-}
+}*/

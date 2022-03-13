@@ -1,8 +1,6 @@
 package com.example.demo.entities;
 
-import com.example.demo.gameState.Board;
 import com.example.demo.gameState.ConfigReader;
-import com.example.demo.parseEngine.Factory;
 import com.example.demo.parseEngine.SyntaxErrorException;
 import com.example.demo.utility.Pair;
 
@@ -12,7 +10,7 @@ public class Antibody extends Entities{
     private int cost;
     private int creditGain;
 
-    public Antibody(String geneticCode,Pair<Integer,Integer> location,Board board){
+    public Antibody(String geneticCode, Pair<Integer,Integer> location, int board){
         super(geneticCode, location,board);
     }
 

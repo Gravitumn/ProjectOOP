@@ -1,21 +1,15 @@
 package com.example.demo.entities;
 
-import com.example.demo.gameState.Board;
 import com.example.demo.gameState.ConfigReader;
-import com.example.demo.parseEngine.Factory;
 import com.example.demo.parseEngine.SyntaxErrorException;
-import com.example.demo.utility.Increment;
 import com.example.demo.utility.Pair;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 public class Virus extends Entities {
 
     private int lifeGain;
 
-    public Virus(String geneticCode,Pair<Integer,Integer> location,Board board){
-        super(geneticCode,location,board);
+    public Virus(String geneticCode, Pair<Integer,Integer> location, int universe){
+        super(geneticCode,location,universe);
     }
 
     @Override

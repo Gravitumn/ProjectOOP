@@ -19,11 +19,11 @@ public class GameLoop extends Thread{
     GameState state;
     boolean stop = false;
 
-    public GameLoop(GameState state){
+    public GameLoop(int universe){
         cf = new ConfigReader();
         Pair<Integer,Integer> size = cf.getCoordinate();
-        this.state = state;
-        this.board = new Board(size.fst(), size.snd(), state);
+        this.state = GameState.instance(universe);
+        this.board = Board.instance(universe);
     }
 
     public void run() {
@@ -42,8 +42,4 @@ public class GameLoop extends Thread{
         }
         catch (SyntaxErrorException | EvalError | InterruptedException e){e.printStackTrace();}
         }
-    }
-
-
-
 }

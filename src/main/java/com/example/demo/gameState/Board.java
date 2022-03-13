@@ -10,14 +10,30 @@ import java.util.*;
 
 public class Board{
     GameState state;
+    private static Map<Integer,Board> instances = new HashMap<>();
+
     private static final Factory factory = Factory.instance();
-    int x;
-    int y;
+    private int x;
+    private int y;
+    private int universe;
     private final Entity[][] grid;
     private Set<Pair<Integer,Integer>> availableSpace = new HashSet<>();
+    private ConfigReader cf = new ConfigReader();
 
-    public Board(int m,int n,GameState state){
-        this.state = state;
+    //interning
+    public static Board instance(int universe){
+        if(!instances.containsKey(universe)){
+            //instantiate for first use
+            instances.put(universe,new Board(universe));
+        }
+        return instances.get(universe);
+    }
+
+    private Board(int u){
+        this.universe = u;
+        int m = cf.getCoordinate().fst();
+        int n = cf.getCoordinate().snd();
+        this.state = GameState.instance(u);
         this.x = m;
         this.y = n;
         grid = new Entity[n][m];
@@ -135,7 +151,7 @@ public class Board{
     public void turnVirus(Entity e,String geneticCode){
         Pair<Integer,Integer> loc = e.getLocation();
         this.delete(e);
-        Virus v = new Virus(geneticCode,loc,this);
+        Virus v = new Virus(geneticCode,loc,universe);
     }
 
     public void setSpace(){
