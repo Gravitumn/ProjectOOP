@@ -60,6 +60,7 @@ function Home() {
                     </div>
                     <div className='text-right my-16 mr-4'>
                         <div className="text-slate-100 text-3xl">Can you protect your body?  </div>
+                        <button className="text-slate-100 text-xl" onClick={() => {nav('/about')}}>About us</button>
                     </div>
                 
                 </div>
