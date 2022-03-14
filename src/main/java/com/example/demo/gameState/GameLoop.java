@@ -17,7 +17,7 @@ public class GameLoop extends Thread{
     ConfigReader cf;
     Board board;
     GameState state;
-    boolean stop = false;
+//    boolean stop = false;
 
     public GameLoop(int universe){
         cf = new ConfigReader();
@@ -29,14 +29,14 @@ public class GameLoop extends Thread{
     public void run() {
         try {
             while (!state.virusList.isEmpty() && !state.antibodyList.isEmpty()) {
-                if (stop) {
+                /*if (stop) {
                     wait();
-                } else {
+                } else {*/
                     for (Entity entity : state.queue) {
                         CmdParser parser = new CmdParser(entity);
                         parser.parseProgram();
-                        Thread.sleep((long) state.gameSpeed*100);
-                    }
+                        Thread.sleep((long) (1/state.gameSpeed)*1000);
+//                    }
                 }
             }
         }

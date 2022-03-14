@@ -7,21 +7,20 @@ import org.springframework.boot.SpringApplication;
 public class GameRunner extends Thread{
     private GameState state;
     private int universe;
-    private boolean stop = false;
+//    private boolean stop = false;
 
     public GameRunner(int universe){
         this.universe = universe;
         this.state = GameState.instance(universe);
     }
 
-    public void gameStart(String[] args){
+    public void gameStart(){
         Thread gameLoop = new GameLoop(universe);
         gameLoop.start();
-        SpringApplication.run(EntityController.class,args);
     }
 
-    public void toggleStop(){
+    /*public void toggleStop(){
         if(stop)stop=false;
         stop=true;
-    }
+    }*/
 }

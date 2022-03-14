@@ -18,10 +18,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @SpringBootApplication
@@ -35,14 +32,31 @@ public class EntityController {
 
 	public EntityController(){
 	}
-	GameState state;
-	Board board;
+	Map<Integer,GameState> state;
+	Map<Integer,Board> board;
+	Map<Integer,GameLoop> gameLoop;
 
 	@GetMapping("/{id}/state")
 	public GameState state(@PathVariable int id){
-		state = GameState.instance(id);
+		state.put(id,GameState.instance(id));
 		Virus v = new Virus("",factory.newPair(2,2),1);
-		return state;
+		return state.get(id);
+	}
+
+	@PostMapping("/{id}/start")
+	public void start(@PathVariable int id){
+		gameLoop.put(id,new GameLoop(id));
+		gameLoop.get(id).start();
+	}
+
+	@PostMapping("/{id}/pause")
+	public void pause(@PathVariable int id) throws InterruptedException {
+		gameLoop.get(id).wait();
+	}
+
+	@PostMapping("/{id}/continue")
+	public void continueGame(@PathVariable int id) throws InterruptedException {
+		gameLoop.get(id).notify();
 	}
 
 	public static void main(String[] args){
