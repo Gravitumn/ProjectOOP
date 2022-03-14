@@ -46,4 +46,12 @@ public class GameState {
     public int getCredits() {
         return credits;
     }
+
+    public Set<Antibody> getShop() {
+        return Shop;
+    }
+
+    public Set<Entity> getQueue() {
+        return queue;
+    }
 }

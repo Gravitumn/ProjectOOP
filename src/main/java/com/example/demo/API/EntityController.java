@@ -6,7 +6,9 @@ import com.example.demo.entities.Antibody;
 import com.example.demo.entities.Entity;
 import com.example.demo.entities.Virus;
 import com.example.demo.gameState.*;
+import com.example.demo.parseEngine.Factory;
 import com.example.demo.utility.Pair;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,33 +23,30 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+
 @SpringBootApplication
 @RestController
 public class EntityController {
 
+	private final Factory factory = Factory.instance();
 	private AntibodyRepo antirepo;
 	private virusRepo virusrepo;
 	private EntityRepo entityRepo;
 
 	public EntityController(){
-		this.antirepo =
 	}
 	GameState state;
 	Board board;
 
-	public EntityController(int universe){
-		state = GameState.instance(universe);
-		board = Board.instance(universe);
+	@GetMapping("/{id}/state")
+	public GameState state(@PathVariable int id){
+		state = GameState.instance(id);
+		Virus v = new Virus("",factory.newPair(2,2),1);
+		return state;
 	}
 
-	@GetMapping("/viruses")
-	Set<Virus> viruses(){
-		return state.getVirusList();
-	}
-
-	@PostMapping("/viruses")
-	void newVirus(@RequestBody Virus newVirus){
-
+	public static void main(String[] args){
+		SpringApplication.run(EntityController.class,args);
 	}
 
 

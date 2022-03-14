@@ -9,11 +9,12 @@ public class Pair<T1, T2> {
         this.snd = snd;
     }
 
-    public T1 fst() {
+    public T1 getfst() {
         return fst;
     }
 
-    public T2 snd() {
+
+    public T2 getsnd() {
         return snd;
     }
 

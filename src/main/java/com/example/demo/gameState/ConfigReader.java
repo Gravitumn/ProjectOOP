@@ -24,7 +24,6 @@ public class ConfigReader {
     private void Setup(){
         try(FileReader fr = new FileReader(inFile);
             Scanner s = new Scanner(fr) ){
-            System.out.println(s.nextInt());
             x=s.nextInt();
             y=s.nextInt();
             spawnRate=s.nextInt();

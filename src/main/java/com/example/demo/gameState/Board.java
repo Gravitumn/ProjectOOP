@@ -2,10 +2,8 @@ package com.example.demo.gameState;
 
 import com.example.demo.entities.*;
 import com.example.demo.parseEngine.Factory;
-import com.example.demo.parseEngine.SyntaxErrorException;
 import com.example.demo.utility.Pair;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.*;
 
 public class Board{
@@ -31,8 +29,8 @@ public class Board{
 
     private Board(int u){
         this.universe = u;
-        int m = cf.getCoordinate().fst();
-        int n = cf.getCoordinate().snd();
+        int m = cf.getCoordinate().getfst();
+        int n = cf.getCoordinate().getsnd();
         this.state = GameState.instance(u);
         this.x = m;
         this.y = n;
@@ -57,7 +55,7 @@ public class Board{
      * @return distance between these locations.
      */
     public int findDistance(Pair<Integer,Integer> firstloc,Pair<Integer,Integer> secondloc){
-        return Math.max(Math.abs(firstloc.fst()-secondloc.fst()),Math.abs(firstloc.snd()-secondloc.snd()));
+        return Math.max(Math.abs(firstloc.getfst()-secondloc.getfst()),Math.abs(firstloc.getsnd()-secondloc.getsnd()));
     }
 
     /**
@@ -100,7 +98,7 @@ public class Board{
             }
             availableSpace.remove(location);
             state.queue.add(e);
-            grid[location.snd()][location.fst()] = e;
+            grid[location.getsnd()][location.getfst()] = e;
             return true;
         }
         return false;
@@ -118,8 +116,8 @@ public class Board{
         if(isAvailable(newLocation))
         {
             availableSpace.add(e.getLocation());
-            grid[e.getLocation().snd()][e.getLocation().fst()] = null;
-            grid[newLocation.snd()][newLocation.fst()] = e;
+            grid[e.getLocation().getsnd()][e.getLocation().getfst()] = null;
+            grid[newLocation.getsnd()][newLocation.getfst()] = e;
             availableSpace.remove(newLocation);
             return true;
         }
@@ -131,15 +129,15 @@ public class Board{
     }
 
     private boolean isAvailable(Pair<Integer,Integer> location){
-        return location.fst() >= 0 && location.fst() < x &&
-                location.snd() >= 0 && location.snd() < y &&
-                !IsVirus(location.fst(), location.snd()) &&
-                !IsAntibody(location.fst(), location.snd());
+        return location.getfst() >= 0 && location.getfst() < x &&
+                location.getsnd() >= 0 && location.getsnd() < y &&
+                !IsVirus(location.getfst(), location.getsnd()) &&
+                !IsAntibody(location.getfst(), location.getsnd());
     }
 
     public void delete(Entity e){
         Pair<Integer,Integer> loc = e.getLocation();
-        grid[loc.snd()][loc.fst()] = null;
+        grid[loc.getsnd()][loc.getfst()] = null;
         availableSpace.add(loc);
         if(e instanceof Virus)
             state.virusList.remove(e);

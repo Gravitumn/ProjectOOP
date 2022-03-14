@@ -19,8 +19,8 @@ public class Antibody extends Entities{
         int distance = nearbyEntity(direction);
         int type = distance % 10;
         distance = distance / 10;
-        int startX = this.location.fst();
-        int startY = this.location.snd();
+        int startX = this.location.getfst();
+        int startY = this.location.getsnd();
         if(distance!=0) {
             int xIncrement = factory.newIncrement(direction).xIncrement();
             int yIncrement = factory.newIncrement(direction).yIncrement();

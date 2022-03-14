@@ -32,8 +32,8 @@ public class Entities implements Entity {
     public void changeLocation(int direction) throws SyntaxErrorException {
         //change x and y coordinate depends on given direction.
         //if you're wondering about Increment, The file also attach in this submit.
-        int xCoordinate = this.location.fst();
-        int yCoordinate = this.location.snd();
+        int xCoordinate = this.location.getfst();
+        int yCoordinate = this.location.getsnd();
         int xIncrement = factory.newIncrement(direction).xIncrement();
         int yIncrement = factory.newIncrement(direction).yIncrement();
 
@@ -56,8 +56,8 @@ public class Entities implements Entity {
     @Override
     public int nearbyEntity(int direction) throws SyntaxErrorException {
         //change x and y coordinate depends on given direction.
-        int startX = this.location.fst();
-        int startY = this.location.snd();
+        int startX = this.location.getfst();
+        int startY = this.location.getsnd();
         Pair<Integer,Integer> boardSize = board.size();
 
         int xIncrement = factory.newIncrement(direction).xIncrement();
@@ -70,8 +70,8 @@ public class Entities implements Entity {
             startX+=xIncrement;
             startY+=yIncrement;
             //if the current location is out of bounds, there's no entity in this direction.
-            if(startX > boardSize.fst() || startY > boardSize.snd() || startX < 0 || startY < 0 ||
-                    startX==boardSize.fst()-1 || startY== boardSize.snd()-1){
+            if(startX > boardSize.getfst() || startY > boardSize.getsnd() || startX < 0 || startY < 0 ||
+                    startX==boardSize.getfst()-1 || startY== boardSize.getsnd()-1){
                 return 0;
             }
         }
@@ -90,8 +90,8 @@ public class Entities implements Entity {
         //checking all 8 directions.
         for(int i=1;i<=8;i++){
             boolean stop = false;
-            int startX = this.location.fst();
-            int startY = this.location.snd();
+            int startX = this.location.getfst();
+            int startY = this.location.getsnd();
             int xIncrement = factory.newIncrement(i).xIncrement();
             int yIncrement = factory.newIncrement(i).yIncrement();
             startX += xIncrement;
@@ -100,7 +100,7 @@ public class Entities implements Entity {
                 startX+=xIncrement;
                 startY+=yIncrement;
                 //set boolean "stop" for ignoring this direction.
-                if(startX > boardSize.fst() || startY > boardSize.snd() || startX < 0 || startY < 0){
+                if(startX > boardSize.getfst() || startY > boardSize.getsnd() || startX < 0 || startY < 0){
                     stop = true;
                 }
             }
@@ -121,8 +121,8 @@ public class Entities implements Entity {
 
         for(int i=1;i<=8;i++){
             boolean stop = false;
-            int startX = this.location.fst();
-            int startY = this.location.snd();
+            int startX = this.location.getfst();
+            int startY = this.location.getsnd();
             int xIncrement = factory.newIncrement(i).xIncrement();
             int yIncrement = factory.newIncrement(i).yIncrement();
             startX += xIncrement;
@@ -131,7 +131,7 @@ public class Entities implements Entity {
             while(!board.IsAntibody(startX,startY) && !stop){
                 startX+=xIncrement;
                 startY+=yIncrement;
-                if(startX > boardSize.fst() || startY > boardSize.snd() || startX < 0 || startY < 0){
+                if(startX > boardSize.getfst() || startY > boardSize.getsnd() || startX < 0 || startY < 0){
                     stop = true;
                 }
             }
@@ -173,5 +173,9 @@ public class Entities implements Entity {
     @Override
     public void setUpEntity(ConfigReader cf){
         //subclasses will handle this.
+    }
+
+    public int getHp() {
+        return hp;
     }
 }
