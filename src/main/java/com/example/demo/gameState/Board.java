@@ -154,7 +154,7 @@ public class Board{
 
     public void setSpace(){
         for(int i = 0;i<x;i++){
-            for(int j = 0;j<x;j++){
+            for(int j = 0;j<y;j++){
                 availableSpace.add(factory.newPair(i,j));
             }
         }
