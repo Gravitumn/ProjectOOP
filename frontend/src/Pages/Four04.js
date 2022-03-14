@@ -27,11 +27,11 @@ function Four04() {
                     <SadEmoji />
                 </div> {/*images*/}
                 <div>You will be redirected soon.</div>
-                <div classname='bg-gray-400 shadow-lg' onClick={() => {baccToHome()}}>
+                <div classname='bg-gray-400 shadow-lg' onClick={() => { baccToHome() }}>
                     Or click here to go back
                 </div>
 
-                {/*{home()}*/}    {/*redirect fn here*/}
+                {home()}    {/*redirect fn here*/}
             </div>
             <div className="text-center">
                 @2022 by abc team

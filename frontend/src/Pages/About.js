@@ -10,7 +10,7 @@ function About() {
                 <div className="text-bold text-2xl mr-4">
                     About us
                 </div>
-                <button className="" onClick={nav('/')}>Back</button>
+                <button className="" onClick={() => nav('/')}>Back</button>
             </div>
             <div className="my-2">
                 <div>
