@@ -27,11 +27,13 @@ function GamePad() {
             console.log("row added")
             return (
                 <div className="flex flex-row">
-                    {rowData.map((tile) => (
-                        <div>
-                            {tile}
-                        </div>
-                    ))}
+                    {rowData.map((tile) => {
+                        return (
+                            <div>
+                                {tile}
+                            </div>
+                        )
+                    })}
                 </div>
             )
         }
@@ -46,11 +48,38 @@ function GamePad() {
         return (
             <div className="flex flex-col">
                 {boardData.map((row) => {
-                    <div>
-                        {row}
-                    </div>
+                    return (
+                        <div>
+                            {row}
+                        </div>
+                    )
                 })}
 
+            </div>
+        )
+    }
+
+    const rowTest = () => {
+        const tileTest = () => {
+            return (
+                <div>
+                    kek
+                </div>
+            )
+        }
+
+        const rowData = []
+        for (let i = 0; i < 10; i++) rowData.push(tileTest())
+
+
+
+        return (
+            <div>
+                {rowData.map(tile => {
+                    return (
+                        { tile }
+                    )
+                })}
             </div>
         )
     }
