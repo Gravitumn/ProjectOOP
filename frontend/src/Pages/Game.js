@@ -35,9 +35,9 @@ function Game() {
         }
         //game page
         return (
-            <div className="">
+            <div className="flex flex-col itmes-center mx-screen">
                 {/* game bar */}
-                <div className="bg-gray-800 flex mx-auto flex-row justify-around text-slate-300 my-auto items-center">
+                <div className="pt-2 bg-gray-800 flex flex-row justify-around text-slate-300 my-auto items-center">
                     {/* pause */}
                     <div onClick={() => { }}>
                         <button onClick={() => { setPaused(true) }}>
@@ -63,7 +63,9 @@ function Game() {
                     </div>
                 </div>
 
-                <GamePad />
+                
+
+                {GamePad()}
 
             </div>
         )
