@@ -34,13 +34,16 @@ public class GameLoop extends Thread{
             while (!state.virusList.isEmpty() && !state.antibodyList.isEmpty()) {
                 double spawnrate = cf.getSpawnRate()*100;
                 int chance = new Random().nextInt(100)+1;
+
+                //chance to spawn Virus every time unit.
                 if(spawnrate >= chance){
                     Set<Pair<Integer,Integer>> availableSpace = board.getAvailableSpace();
                     int rand = new Random().nextInt(availableSpace.size());
                     Pair<Integer,Integer> randLoc = new ArrayList<>(availableSpace).get(rand);
-                    new Virus("",randLoc,universe);
+                    new Virus(state.VirusShop.get(new Random().nextInt(state.virusList.size())),randLoc,universe);
                 }
 
+                //parse all living entity
                 for (Entity entity : state.queue) {
                     CmdParser parser = new CmdParser(entity);
                     parser.parseProgram();

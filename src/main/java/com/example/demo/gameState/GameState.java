@@ -13,13 +13,14 @@ public class GameState {
 
     protected float gameSpeed;
     protected int credits;
-    protected Set<String> AntibodyShop;
-    protected Set<String> VirusShop;
+    protected List<String> AntibodyShop = new ArrayList<>();
+    protected List<String> VirusShop = new ArrayList<>();
     protected Set<Entity> queue = new HashSet<>();
     protected Set<Antibody> antibodyList = new HashSet<>();
     protected Set<Virus> virusList = new HashSet<>();
 
     private GameState(int u){
+
         try{
             File myObj = new File("src/main/java/com/example/demo/antibody1.txt");
             Scanner myReader = new Scanner(myObj);
@@ -96,7 +97,7 @@ public class GameState {
         return credits;
     }
 
-    public Set<String> getAntibodyShop() {
+    public List<String> getAntibodyShop() {
         return AntibodyShop;
     }
 

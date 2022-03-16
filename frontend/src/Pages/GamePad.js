@@ -10,8 +10,8 @@ function GamePad() {
             const tile = () => {
                 console.log("tile added")
                 return (
-                    <div>
-                        welp
+                    <div class="square p">
+                        
                     </div>
                 )
             }
