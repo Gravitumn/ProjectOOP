@@ -39,13 +39,13 @@ public class EntityController {
 	@GetMapping("/{id}/state")
 	public GameState state(@PathVariable int id){
 		state.put(id,GameState.instance(id));
-		Virus v = new Virus("",factory.newPair(2,2),1);
 		return state.get(id);
 	}
 
 	@GetMapping("/{id}/board")
 	public Board board(@PathVariable int id){
 		board.put(id,Board.instance(id));
+		Virus v = new Virus("", factory.newPair(5,5),1 );
 		return board.get(id);
 	}
 

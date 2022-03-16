@@ -163,4 +163,16 @@ public class Board{
     public Set<Pair<Integer, Integer>> getAvailableSpace() {
         return availableSpace;
     }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public Entity[][] getGrid() {
+        return grid;
+    }
 }
