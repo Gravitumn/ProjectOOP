@@ -4,7 +4,7 @@ import Pauz from './Components/images/pauz.png'
 
 //board to be imported
 import GamePad from "./GamePad";
-
+import axios from 'axios';
 
 
 
@@ -13,6 +13,10 @@ function Game() {
 
     const [paused, setPaused] = useState(false)
 
+    const test = async() =>{
+        const state = await axios.get('http://localhost:8080/1/state')
+        return state.data.credits
+    }
     
     const page = () => {
         if (paused) {
@@ -51,7 +55,7 @@ function Game() {
                     </div>
                     {/*wave counter*/}
                     <div>
-                        Wave: 3/10
+                        {test()}
                     </div>
                     {/*funds*/}
                     <div>
